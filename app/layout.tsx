@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Nav } from "@/components/nav";
+import { CursorGlow } from "@/components/cursor-glow";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -53,6 +55,8 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <CursorGlow />
+          <Nav />
           {children}
         </ThemeProvider>
       </body>

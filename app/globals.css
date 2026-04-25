@@ -131,6 +131,10 @@
 
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+    /* Stops the floating nav from covering section headings when you click
+       an anchor link. ~80px = nav height + breathing room. */
+    scroll-padding-top: 5rem;
   }
 
   body {

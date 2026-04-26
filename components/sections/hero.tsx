@@ -9,7 +9,7 @@ import { Mail } from "lucide-react";
  *
  * LinkedIn defaults to "#" — replace with your actual profile URL.
  */
-const LINKEDIN_URL = "#";
+const LINKEDIN_URL = "https://www.linkedin.com/in/jake-squelch";
 const GITHUB_URL = "https://github.com/Jakesquelch";
 const CONTACT_EMAIL = "jakewsquelch@gmail.com";
 

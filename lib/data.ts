@@ -58,3 +58,36 @@ export const experiences = [
       "Year-long placement on the Ceph distributed-storage team.",
   },
 ] as const satisfies readonly Experience[];
+
+// ---------- Projects ------------------------------------------------------
+
+/**
+ * Each project renders as a glass card with a screenshot, blurb, and a link
+ * to the repo.
+ *
+ * To add a real project: drop a screenshot in `public/projects/` (any
+ * reasonable aspect ratio — the card crops to 16:10), then add an object to
+ * the `projects` array below. The grid grows to fill, no component changes
+ * needed.
+ *
+ * Set `image` to null to render the styled "Coming soon" placeholder, and
+ * `github` to null to render a non-link "Repo coming soon" instead of the
+ * GitHub link.
+ */
+export type Project = {
+  title: string;
+  description: string;
+  image: string | null;
+  github: string | null;
+  tags?: readonly string[];
+};
+
+export const projects: readonly Project[] = [
+  {
+    title: "Project name pending",
+    description:
+      "Placeholder card — drop in a screenshot, a short blurb, and a repo link via lib/data.ts and this slot fills in. Add more entries to the array and the grid extends.",
+    image: null,
+    github: null,
+  },
+];

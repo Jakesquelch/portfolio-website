@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { StarfieldSVG } from "@/components/starfield-svg";
 import { BackToTop } from "@/components/back-to-top";
+import { Footer } from "@/components/footer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -58,7 +59,10 @@ export default function RootLayout({
         >
           <StarfieldSVG />
           <Nav />
-          {children}
+          <div className="flex flex-1 flex-col">
+            {children}
+            <Footer />
+          </div>
           <BackToTop />
         </ThemeProvider>
       </body>

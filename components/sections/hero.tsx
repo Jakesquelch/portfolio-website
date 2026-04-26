@@ -47,7 +47,7 @@ export function Hero() {
 
           {/* Circular frame: glass-rimmed, soft inset highlight, drop shadow */}
           <div
-            className="relative h-44 w-44 overflow-hidden rounded-full border border-white/15 md:h-56 md:w-56 lg:h-72 lg:w-72 xl:h-80 xl:w-80"
+            className="relative h-36 w-36 overflow-hidden rounded-full border border-white/15 sm:h-44 sm:w-44 md:h-56 md:w-56 lg:h-72 lg:w-72 xl:h-80 xl:w-80"
             style={{
               boxShadow:
                 "inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 36px rgba(0,0,0,0.4)",
@@ -58,7 +58,7 @@ export function Hero() {
               alt="Jake Squelch"
               fill
               priority
-              sizes="(min-width: 1280px) 320px, (min-width: 1024px) 288px, (min-width: 768px) 224px, 176px"
+              sizes="(min-width: 1280px) 320px, (min-width: 1024px) 288px, (min-width: 768px) 224px, (min-width: 640px) 176px, 144px"
               style={{
                 objectFit: "cover",
                 objectPosition: "center 22%",
@@ -77,7 +77,7 @@ export function Hero() {
               delay: 0.15,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="text-gradient text-center font-heading text-6xl font-semibold tracking-tight md:text-left md:text-7xl lg:text-8xl xl:text-9xl"
+            className="text-gradient text-center font-heading text-5xl font-semibold tracking-tight sm:text-6xl md:text-left md:text-7xl lg:text-8xl xl:text-9xl"
           >
             Jake Squelch
           </motion.h1>
@@ -90,7 +90,7 @@ export function Hero() {
               delay: 0.3,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="text-xl tracking-wide text-muted-foreground md:text-2xl lg:text-3xl"
+            className="text-lg tracking-wide text-muted-foreground sm:text-xl md:text-2xl lg:text-3xl"
           >
             Software Developer
           </motion.p>

@@ -9,8 +9,8 @@
 export const about = {
   heading: "About",
   paragraphs: [
-    "I'm a final-year Computer Science student at Aston University in Birmingham. I work across the stack — for now I'm sampling everything from low-level backend to UI work, figuring out which corner of the field I want to live in.",
-    "Before this year I spent a year-long placement at IBM in Southampton, building software at enterprise scale. Before that, six months part-time at Civico — a Birmingham startup — as a backend C++ engineer. Two roles, two very different views of the industry: how a big shop builds, and how a small team ships.",
-    "Off-screen I'm usually on a golf course or on a motorbike. Hiking, football, and the gym fill in the rest — anything that keeps me outside and moving.",
+    "Hello, I'm Jake! A final-year Computer Science student studying at Aston University in Birmingham. I work across the stack — for now I'm doing everything from low-level backend to UI work.",
+    "Between my second and third year at university I spent a year-long placement at IBM in Southampton, being apart of the Ceph team. Before that, between my first and second year, I spent six months part-time at Civico — a Birmingham startup — as a backend C++ engineer.",
+    "Outside of work I like to play golf (usually only when the weather is good!), meet up with friends, and the gym fills in the rest of my time.",
   ],
 } as const;

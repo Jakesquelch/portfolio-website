@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7dd3fc"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <!-- Dark cosmic indigo rounded square as the chip background -->
+  <rect width="32" height="32" rx="7" fill="#0a0d1a"/>
+  <!-- 4-pointed sparkle / shine, concave-sided so it reads as a star not a +
+       The four cubic-bezier "pinch" curves give it the diamond-with-waist
+       silhouette that catches the eye even at favicon size. -->
+  <path
+    d="M16 5 C 16.5 12, 20 15.5, 27 16 C 20 16.5, 16.5 20, 16 27 C 15.5 20, 12 16.5, 5 16 C 12 15.5, 15.5 12, 16 5 Z"
+    fill="url(#g)"/>
+</svg>

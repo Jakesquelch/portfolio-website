@@ -24,9 +24,9 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[90vh] items-center justify-center px-6 py-24"
+      className="relative flex min-h-screen items-center justify-center px-6 py-24"
     >
-      <div className="flex flex-col items-center gap-10 md:flex-row md:items-center md:gap-16">
+      <div className="flex flex-col items-center gap-10 md:flex-row md:items-center md:gap-16 lg:gap-20 xl:gap-24">
         {/* Profile picture */}
         <motion.div
           initial={{ opacity: 0, scale: 0.94 }}
@@ -47,7 +47,7 @@ export function Hero() {
 
           {/* Circular frame: glass-rimmed, soft inset highlight, drop shadow */}
           <div
-            className="relative h-44 w-44 overflow-hidden rounded-full border border-white/15 md:h-56 md:w-56"
+            className="relative h-44 w-44 overflow-hidden rounded-full border border-white/15 md:h-56 md:w-56 lg:h-72 lg:w-72 xl:h-80 xl:w-80"
             style={{
               boxShadow:
                 "inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 36px rgba(0,0,0,0.4)",
@@ -58,7 +58,7 @@ export function Hero() {
               alt="Jake Squelch"
               fill
               priority
-              sizes="(min-width: 768px) 224px, 176px"
+              sizes="(min-width: 1280px) 320px, (min-width: 1024px) 288px, (min-width: 768px) 224px, 176px"
               style={{
                 objectFit: "cover",
                 objectPosition: "center 22%",
@@ -77,7 +77,7 @@ export function Hero() {
               delay: 0.15,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="text-gradient text-center font-heading text-6xl font-semibold tracking-tight md:text-left md:text-8xl"
+            className="text-gradient text-center font-heading text-6xl font-semibold tracking-tight md:text-left md:text-7xl lg:text-8xl xl:text-9xl"
           >
             Jake Squelch
           </motion.h1>
@@ -90,7 +90,7 @@ export function Hero() {
               delay: 0.3,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="text-xl tracking-wide text-muted-foreground md:text-2xl"
+            className="text-xl tracking-wide text-muted-foreground md:text-2xl lg:text-3xl"
           >
             Software Developer
           </motion.p>
@@ -100,7 +100,7 @@ export function Hero() {
             initial={{ opacity: 0, scaleX: 0 }}
             animate={{ opacity: 1, scaleX: 1 }}
             transition={{ duration: 0.7, delay: 0.5, ease: "easeOut" }}
-            className="mt-2 h-px w-32 origin-left bg-gradient-to-r from-cyan/70 via-violet/50 to-transparent"
+            className="mt-2 h-px w-32 origin-left bg-gradient-to-r from-cyan/70 via-violet/50 to-transparent lg:w-40"
           />
         </div>
       </div>

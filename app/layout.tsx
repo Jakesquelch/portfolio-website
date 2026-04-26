@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
-import { CursorGlow } from "@/components/cursor-glow";
+import { StarfieldSVG } from "@/components/starfield-svg";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -55,7 +55,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          <CursorGlow />
+          <StarfieldSVG />
           <Nav />
           {children}
         </ThemeProvider>

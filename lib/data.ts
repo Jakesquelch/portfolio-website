@@ -4,6 +4,18 @@
  * automatically — no need to touch the components.
  */
 
+// ---------- Socials -------------------------------------------------------
+
+/**
+ * Canonical social/contact URLs. Shared by the Hero (icon row + Contact me
+ * mailto) and the Footer (icon row). Edit here once and both update.
+ */
+export const socials = {
+  linkedin: "https://www.linkedin.com/in/jake-squelch",
+  github: "https://github.com/Jakesquelch",
+  email: "jakewsquelch@gmail.com",
+} as const;
+
 // ---------- About ---------------------------------------------------------
 
 export const about = {

@@ -23,19 +23,51 @@ const spaceGrotesk = Space_Grotesk({
   weight: ["400", "500", "600", "700"],
 });
 
+const SITE_TITLE = "Jake Squelch — Software Engineer";
+const SITE_DESCRIPTION =
+  "Personal portfolio of Jake Squelch — final-year Computer Science student at Aston University, with placement experience at IBM (Ceph) and Civico.";
+
+/**
+ * Page metadata. `metadataBase` lets relative og:image paths resolve to an
+ * absolute URL when crawlers fetch the OpenGraph card. The dynamic OG image
+ * lives at `app/opengraph-image.tsx` and is auto-picked-up by Next — no
+ * need to reference it here.
+ */
 export const metadata: Metadata = {
   title: {
-    default: "Jake Squelch — Software Developer",
+    default: SITE_TITLE,
     template: "%s | Jake Squelch",
   },
-  description:
-    "Personal portfolio of Jake Squelch — software developer. Projects, skills, and experience.",
+  description: SITE_DESCRIPTION,
   metadataBase: new URL("https://jakesquelch.dev"),
+  keywords: [
+    "Jake Squelch",
+    "Software Engineer",
+    "Portfolio",
+    "Aston University",
+    "IBM",
+    "Ceph",
+    "C++",
+    "TypeScript",
+    "Next.js",
+  ],
+  authors: [{ name: "Jake Squelch" }],
+  creator: "Jake Squelch",
   openGraph: {
-    title: "Jake Squelch — Software Developer",
-    description:
-      "Personal portfolio of Jake Squelch — software developer. Projects, skills, and experience.",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     type: "website",
+    locale: "en_GB",
+    siteName: "Jake Squelch",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

@@ -10,7 +10,51 @@ export const about = {
   heading: "About",
   paragraphs: [
     "Hello, I'm Jake! A final-year Computer Science student studying at Aston University in Birmingham. I work across the stack — for now I'm doing everything from low-level backend to UI work.",
-    "Between my second and third year at university I spent a year-long placement at IBM in Southampton, being apart of the Ceph team. Before that, between my first and second year, I spent six months part-time at Civico — a Birmingham startup — as a backend C++ engineer.",
     "Outside of work I like to play golf (usually only when the weather is good!), meet up with friends, and the gym fills in the rest of my time.",
   ],
 } as const;
+
+// ---------- Experience ----------------------------------------------------
+
+/**
+ * Each experience renders as a glass card with a circular duration ring.
+ *
+ * `months` controls how far the gradient stroke wraps around the ring (capped
+ * at 12 = full circle). `durationLabel` is what shows in the middle of the
+ * ring — keep it short ("6 mo", "1 yr") so it fits.
+ *
+ * Order matters: cards render left-to-right (or top-to-bottom on mobile) in
+ * array order, so list them chronologically.
+ */
+export type Experience = {
+  company: string;
+  role: string;
+  durationLabel: string;
+  months: number;
+  period: string;
+  location: string;
+  context: string;
+};
+
+export const experiences = [
+  {
+    company: "Civico",
+    role: "Backend C++ Engineer",
+    durationLabel: "4 mo",
+    months: 4,
+    period: "2024",
+    location: "Birmingham, UK",
+    context:
+      "Part-time at a Birmingham startup, between my first and second year of uni.",
+  },
+  {
+    company: "IBM",
+    role: "Software Engineer · Ceph Team",
+    durationLabel: "1 yr",
+    months: 12,
+    period: "2025 – 2026",
+    location: "Southampton, UK",
+    context:
+      "Year-long placement on the Ceph distributed-storage team.",
+  },
+] as const satisfies readonly Experience[];

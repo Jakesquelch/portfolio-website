@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { StarfieldSVG } from "@/components/starfield-svg";
+import { BackToTop } from "@/components/back-to-top";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -58,6 +59,7 @@ export default function RootLayout({
           <StarfieldSVG />
           <Nav />
           {children}
+          <BackToTop />
         </ThemeProvider>
       </body>
     </html>

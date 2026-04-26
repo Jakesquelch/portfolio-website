@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
-import { Mail } from "lucide-react";
+import { Check, Mail } from "lucide-react";
 
 /**
  * Edit these to update the social links + contact target.
@@ -34,6 +35,22 @@ const CONTACT_EMAIL = "jakewsquelch@gmail.com";
  * the eye reads top-to-bottom.
  */
 export function Hero() {
+  // "Email copied!" feedback — flips back to "Contact me" after ~2s. The copy
+  // runs alongside the mailto: navigation so visitors without a default mail
+  // client still walk away with the address on their clipboard.
+  const [copied, setCopied] = useState(false);
+
+  const handleContactClick = () => {
+    if (typeof navigator === "undefined" || !navigator.clipboard) return;
+    navigator.clipboard
+      .writeText(CONTACT_EMAIL)
+      .then(() => {
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 2200);
+      })
+      .catch(() => {});
+  };
+
   return (
     <section
       id="hero"
@@ -148,10 +165,16 @@ export function Hero() {
             </SocialIconLink>
             <a
               href={`mailto:${CONTACT_EMAIL}`}
+              onClick={handleContactClick}
+              aria-live="polite"
               className="glass-strong group ml-1 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-foreground transition-all hover:-translate-y-px hover:bg-white/10 sm:text-base"
             >
-              <Mail className="h-4 w-4 transition-transform group-hover:-translate-y-px" />
-              Contact me
+              {copied ? (
+                <Check className="h-4 w-4 text-cyan" />
+              ) : (
+                <Mail className="h-4 w-4 transition-transform group-hover:-translate-y-px" />
+              )}
+              {copied ? "Email copied!" : "Contact me"}
             </a>
           </motion.div>
         </div>

@@ -15,6 +15,7 @@ const SECTIONS = [
 export function Nav() {
   const [active, setActive] = useState<string>("hero");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const navRef = useRef<HTMLElement>(null);
 
   /**
@@ -41,6 +42,19 @@ export function Nav() {
     }
 
     return () => observer.disconnect();
+  }, []);
+
+  /**
+   * Scroll listener: once the user has scrolled past the first ~80px the nav
+   * switches to its elevated glass variant — more opaque background, stronger
+   * rim, deeper shadow — so the pill stays legible against busy section
+   * content. Stays light on the hero where there's nothing competing.
+   */
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   // Close mobile menu when clicking outside or hitting Escape.
@@ -72,7 +86,12 @@ export function Nav() {
       className="fixed top-4 left-1/2 z-50 -translate-x-1/2"
     >
       {/* ---------- Desktop: horizontal pill (md and up) ---------- */}
-      <ul className="glass-strong hidden items-center gap-1 rounded-full px-2 py-2 md:flex">
+      <ul
+        className={cn(
+          "hidden items-center gap-1 rounded-full px-2 py-2 transition-all duration-300 md:flex",
+          scrolled ? "glass-strong-elevated" : "glass-strong",
+        )}
+      >
         {SECTIONS.map(({ id, label }) => {
           const isActive = active === id;
           return (
@@ -108,7 +127,10 @@ export function Nav() {
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav-menu"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          className="glass-strong flex h-11 w-11 items-center justify-center rounded-full text-foreground"
+          className={cn(
+            "flex h-11 w-11 items-center justify-center rounded-full text-foreground transition-all duration-300",
+            scrolled ? "glass-strong-elevated" : "glass-strong",
+          )}
         >
           {/* Cross-fade between Menu and X icons. */}
           <AnimatePresence mode="wait" initial={false}>
@@ -144,7 +166,10 @@ export function Nav() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.96 }}
               transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-              className="glass-strong absolute top-full left-1/2 mt-3 flex min-w-[180px] -translate-x-1/2 flex-col gap-1 rounded-2xl p-2"
+              className={cn(
+                "absolute top-full left-1/2 mt-3 flex min-w-[180px] -translate-x-1/2 flex-col gap-1 rounded-2xl p-2",
+                scrolled ? "glass-strong-elevated" : "glass-strong",
+              )}
             >
               {SECTIONS.map(({ id, label }) => {
                 const isActive = active === id;

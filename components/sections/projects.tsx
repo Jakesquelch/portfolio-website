@@ -7,17 +7,21 @@ import { ArrowUpRight, FolderGit2 } from "lucide-react";
 import { projects, type Project } from "@/lib/data";
 
 /**
- * Projects section — grid of glass cards driven by lib/data.ts.
+ * Projects section — vertical stack of wide horizontal glass cards driven
+ * by lib/data.ts.
  *
- * Layout: 1 column on mobile, 2 on md+, 3 on lg+. The grid grows to fill
- * the available cells as more entries are added, so adding a project is a
- * data-only change.
+ * Layout: each card is full container-width and stacks on top of the next.
+ * On md+ the image sits on the left (≈40%) with content on the right; on
+ * mobile the image stacks above the content. This way a single card
+ * doesn't look stranded the way a 1/3-width grid cell would, and adding
+ * more entries just extends the stack downward.
  *
- * Each card has a 3D mouse-tilt on hover (perspective + rotateX/rotateY
- * driven by cursor offset). The tilt is applied via inline `style.transform`
- * in a mousemove handler — no React re-renders, runs on the compositor.
+ * Each card has a subtle 3D mouse-tilt on hover (perspective + rotateX/
+ * rotateY from cursor offset). The tilt is applied via inline
+ * `style.transform` in a mousemove handler — no React re-renders, runs on
+ * the compositor.
  *
- * Entrance: heading fades up first, then each card staggers in by ~100ms.
+ * Entrance: heading fades up first, then each card staggers in by ~120ms.
  */
 export function Projects() {
   return (
@@ -25,7 +29,7 @@ export function Projects() {
       id="projects"
       className="relative px-6 py-24 md:py-32 lg:py-40"
     >
-      <div className="mx-auto max-w-3xl lg:max-w-6xl">
+      <div className="mx-auto max-w-3xl lg:max-w-5xl">
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -36,7 +40,7 @@ export function Projects() {
           Projects
         </motion.h2>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+        <div className="flex flex-col gap-6 lg:gap-8">
           {projects.map((project, i) => (
             <ProjectCard key={i} project={project} index={i} />
           ))}
@@ -47,11 +51,15 @@ export function Projects() {
 }
 
 /**
- * Single project card. The outer wrapper handles entrance animation
- * (motion.div with `whileInView` y-fade) and provides the 3D perspective.
- * The inner `<article>` is the element that actually tilts on mousemove —
- * keeping the two transforms on different elements stops the entrance
- * animation and the tilt from fighting over the same `transform` value.
+ * Single horizontal project card. The outer wrapper handles entrance
+ * animation (motion.div with `whileInView` y-fade) and provides the 3D
+ * perspective. The inner `<article>` is the element that actually tilts on
+ * mousemove — keeping the two transforms on different elements stops the
+ * entrance animation and the tilt from fighting over the same `transform`
+ * value.
+ *
+ * On md+ the article is `flex-row` (image left, content right). On mobile
+ * it falls back to `flex-col` so the image sits on top of the content.
  */
 function ProjectCard({
   project,
@@ -68,9 +76,10 @@ function ProjectCard({
     const rect = el.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    // ±4deg feels lively without disorienting the eye on a static card.
-    const rotateY = x * 8;
-    const rotateX = -y * 8;
+    // ±2.5deg — subtler than a square card needs, since the wide footprint
+    // makes any rotation feel more pronounced.
+    const rotateY = x * 5;
+    const rotateX = -y * 5;
     el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
   };
 
@@ -87,10 +96,10 @@ function ProjectCard({
       viewport={{ once: true, amount: 0.2 }}
       transition={{
         duration: 0.75,
-        delay: 0.1 + index * 0.1,
+        delay: 0.1 + index * 0.12,
         ease: [0.22, 1, 0.36, 1],
       }}
-      style={{ perspective: 1100 }}
+      style={{ perspective: 1400 }}
     >
       <article
         ref={tiltRef}
@@ -101,16 +110,16 @@ function ProjectCard({
           transition: "transform 0.25s ease-out",
           willChange: "transform",
         }}
-        className="glass group flex h-full flex-col overflow-hidden rounded-2xl"
+        className="glass group flex flex-col overflow-hidden rounded-2xl md:flex-row md:min-h-[260px] lg:min-h-[280px]"
       >
-        {/* Image / placeholder */}
-        <div className="relative aspect-[16/10] overflow-hidden border-b border-white/10">
+        {/* Image / placeholder — full width on mobile, ~40% on md+ */}
+        <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/10 md:aspect-auto md:w-[42%] md:flex-none md:border-r md:border-b-0">
           {project.image ? (
             <Image
               src={project.image}
               alt={project.title}
               fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+              sizes="(min-width: 768px) 42vw, 100vw"
               className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
           ) : (
@@ -119,8 +128,8 @@ function ProjectCard({
         </div>
 
         {/* Body */}
-        <div className="flex flex-1 flex-col gap-4 p-6">
-          <h3 className="font-heading text-xl font-semibold tracking-tight text-foreground md:text-2xl">
+        <div className="flex flex-1 flex-col gap-4 p-6 md:gap-5 md:p-8 lg:p-10">
+          <h3 className="font-heading text-xl font-semibold tracking-tight text-foreground md:text-2xl lg:text-3xl">
             {project.title}
           </h3>
           <p className="flex-1 text-sm leading-relaxed text-foreground/75 md:text-base">
@@ -147,13 +156,13 @@ function ProjectCard({
                 href={project.github}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-cyan transition-colors hover:text-foreground"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-cyan transition-colors hover:text-foreground md:text-base"
               >
                 View on GitHub
-                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-px group-hover:translate-x-px" />
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-px group-hover:translate-x-px md:h-5 md:w-5" />
               </a>
             ) : (
-              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground/70">
+              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground/70 md:text-base">
                 Repo coming soon
               </span>
             )}

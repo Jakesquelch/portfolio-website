@@ -1,25 +1,40 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+
+/**
+ * Constant subscribe fn for `useSyncExternalStore`. There's no real store
+ * to subscribe to — we just need React to track "are we on the client yet?"
+ * so it can re-render once after hydration. Returning a no-op unsubscribe
+ * is the canonical way to say "I never emit changes."
+ */
+const subscribeNoop = () => () => {};
 
 /**
  * Floating theme toggle — fixed glass orb in the top-right that swaps
  * between dark and light. Mirrors the back-to-top button's bottom-right
  * position so the two corners feel balanced.
  *
- * `next-themes` sets the `class="dark"` attribute on `<html>` from a
- * pre-hydration script, so the page renders in the correct theme before
- * React mounts. `resolvedTheme` is `undefined` during SSR / the first
- * client render and becomes a string once the provider hydrates — using
- * that as our gate avoids a hydration mismatch without needing a manual
- * `mounted` flag (and dodges the `react-hooks/set-state-in-effect` lint).
+ * SSR / hydration safety: `useTheme` populates `resolvedTheme` lazily from
+ * `localStorage` during the first client render, which doesn't match the
+ * server's `undefined` — that mismatch is what produced the hydration
+ * error. `useSyncExternalStore` with separate server / client snapshots
+ * lets us return `null` during SSR + hydration and only render the button
+ * on the next commit, with no `useEffect` set-state dance (which the
+ * `react-hooks/set-state-in-effect` lint flags).
  */
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
+  const isClient = useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false,
+  );
 
-  if (!resolvedTheme) return null;
+  if (!isClient) return null;
 
   const isDark = resolvedTheme === "dark";
 

@@ -1,17 +1,19 @@
-# Portfolio Website — Plan
+# Portfolio Website — Design notes
+
+This is the living design doc for the site. It captures *what shipped* and
+*why* — not aspirations. For the practical "how do I run / edit this" guide
+see [`README.md`](README.md).
 
 ## Why I'm building this
 
 I'm a software developer, and I want a personal portfolio site that genuinely
-stands out — not another grid-of-cards template. The aesthetic I'm going for
-is **futuristic, glassmorphic (Apple-style frosted glass), space/stars
-themed, with reactive animations**, while staying **fast** (no janky 30fps
-scrolling).
+stands out — not another grid-of-cards template. The aesthetic is
+**futuristic, glassmorphic (Apple-style frosted glass), space/stars themed,
+with reactive animations**, while staying **fast** (no janky 30fps scrolling).
 
-The site needs to showcase Hero/About, Skills, Projects, and Experience, and
-deploy to Vercel. The success criterion I care about most is the
-**wow-on-first-load reaction** — a visitor should think "I haven't seen one
-like this before" — without sacrificing Lighthouse performance.
+Success criterion: the **wow-on-first-load reaction** — a visitor should
+think "I haven't seen one like this before" — without sacrificing Lighthouse
+performance.
 
 ---
 
@@ -20,156 +22,153 @@ like this before" — without sacrificing Lighthouse performance.
 | Layer | Choice | Why |
 |---|---|---|
 | Framework | **Next.js 16 (App Router) + TypeScript** | SSR, file-based routing, `next/image`, deploys to Vercel in one click |
-| Styling | **Tailwind CSS v4** | Required by shadcn; ergonomic for glassmorphism |
-| Components | **shadcn/ui** | Owned components, Radix primitives, easy theming |
+| Styling | **Tailwind CSS v4** | Ergonomic for glassmorphism; CSS-variable tokens via `@theme inline` |
 | Animation | **Motion** (formerly Framer Motion) | GPU-accelerated transforms, scroll triggers, layout animations |
-| 3D / Background | **`@react-three/fiber` + `@react-three/drei`** | WebGL starfield via instanced points (single draw call) |
-| Theme | **`next-themes`** | Default dark, with a toggle later if I want one |
-| Icons | **`lucide-react`** | Bundled with shadcn |
-| Fonts | **Geist Sans + Space Grotesk** | Sleek, slightly futuristic; both via `next/font` (no FOUT) |
+| Background | **Static SVG starfield** | Server-rendered, zero JS — see "Decisions" below |
+| Theme | **`next-themes`** | Currently pinned to dark; toggle planned |
+| Icons | **`lucide-react`** + inline brand SVGs | Lucide stopped shipping brand glyphs, so LinkedIn + GitHub are inlined in `components/icons.tsx` |
+| Fonts | **Geist Sans + Geist Mono + Space Grotesk** | Sleek, slightly futuristic; all via `next/font` (no FOUT) |
 | Deploy | **Vercel** | Zero-config |
 
 ---
 
-## File structure
+## Sections that shipped
 
-```
-Portfolio-Website/
-├── app/
-│   ├── layout.tsx              # ThemeProvider, fonts, metadata
-│   ├── page.tsx                # Single-page composition of all sections
-│   ├── globals.css             # Tailwind + CSS vars (space palette)
-│   └── favicon.ico
-├── components/
-│   ├── sections/
-│   │   ├── hero.tsx            # Name, tagline, scroll cue
-│   │   ├── about.tsx           # Glass panel with bio
-│   │   ├── skills.tsx          # Constellation-style skill grid
-│   │   ├── projects.tsx        # Glass project cards w/ 3D tilt
-│   │   └── experience.tsx      # Vertical timeline
-│   ├── three/
-│   │   ├── starfield.tsx       # Instanced points, mouse parallax
-│   │   └── nebula-mesh.tsx     # Slow color-shifting gradient mesh
-│   ├── ui/                     # shadcn primitives (Card, Button, Badge…)
-│   ├── glass-card.tsx          # Reusable glassmorphism wrapper
-│   ├── nav.tsx                 # Sticky glass nav, active-section highlight
-│   ├── cursor-glow.tsx         # Stardust trail behind the cursor
-│   └── theme-provider.tsx
-├── lib/
-│   ├── utils.ts                # `cn()` helper (shadcn default)
-│   └── data.ts                 # Skills/projects/experience as typed data
-├── public/
-│   ├── projects/               # Project screenshots
-│   └── resume.pdf              # Optional
-├── components.json             # shadcn config
-├── tsconfig.json
-├── next.config.ts
-└── package.json
-```
+Single-page composition (`app/page.tsx`):
+
+1. **Hero** — profile picture inside a glass medallion with a cyan→violet
+   halo behind it, name in gradient text, tagline, social row (LinkedIn,
+   GitHub, Contact-me button that copies the email to clipboard), scroll cue.
+2. **About** — heading + glass card containing photo, bio paragraphs, an
+   internal divider, then an embedded experience timeline. Each role renders
+   as a card with a circular **duration ring** (gradient stroke wraps
+   `months / 12` of the way around) joined by a gradient connector.
+3. **Projects** — vertical stack of wide horizontal glass cards. Image on
+   the left, content on the right (stacks on mobile). Each card has a 3D
+   mouse-tilt on hover.
+
+Persistent UI rendered from `app/layout.tsx`:
+
+- **Nav** — fixed glass pill at the top centre, active section highlighted
+  via Motion `layoutId`. Switches to a heavier elevated glass variant once
+  you scroll off the hero so it stays legible. Mobile gets a glass hamburger
+  + dropdown.
+- **Starfield** — static SVG, sits behind everything at `-z-20`.
+- **BackToTop** — glass orb in the bottom-right that fades in once you've
+  scrolled past ~60% of the viewport.
+- **Footer** — faint divider, social icons, dynamic copyright year.
 
 ---
 
 ## Design system
 
-**Palette** (CSS variables in `globals.css`, all in oklch):
-- Background: deep space — near-black with a hint of cobalt
-- Glass surface: translucent white at ~4% alpha
-- Glass border: white at ~8% alpha
-- Cyan accent: ~`#7dd3fc` — highlights, links, primary
-- Violet accent: ~`#a78bfa` — secondary glow, accent
-- Foreground text: cool white
+Tokens live as CSS variables in `globals.css`, all in **oklch**. The dark
+palette (the only one currently active):
 
-**Glass recipe** (the `.glass` utility):
-```
-backdrop-filter: blur(20px) saturate(140%);
-background: white at 4% alpha;
-border: 1px solid white at 8% alpha;
-inset highlight + drop shadow;
-```
+- Background: deep cosmic indigo `oklch(0.08 0.02 265)`
+- Foreground: cool white `oklch(0.96 0.015 250)`
+- Accent cyan: `oklch(0.86 0.13 220)` (~#7dd3fc)
+- Accent violet: `oklch(0.74 0.16 295)` (~#a78bfa)
+- Glass surface: `oklch(1 0 0 / 4%)` over a 1px `oklch(1 0 0 / 8%)` border
 
-**Type scale**: Geist for body, Space Grotesk for `<h1>`/`<h2>`, slight
-negative letter-spacing on display sizes.
+Behind the starfield SVG, the body has a subtle CSS-only nebula gradient —
+two soft radial blobs (violet top-left, cyan bottom-right) with
+`background-attachment: fixed` so it doesn't scroll.
 
----
+**Glass utilities** (`@utility` in `globals.css`):
 
-## The "wow" layer
+- `.glass` — base frosted surface (4% fill, blur 20px + saturate 140%, inset
+  highlight + drop shadow).
+- `.glass-strong` — heavier (12% indigo fill, blur 28px). Used on the nav
+  and Hero "Contact me" button.
+- `.glass-strong-elevated` — bumped opacity / rim / shadow. The nav swaps to
+  this once `window.scrollY > 80` so the pill stays legible against busy
+  section content.
 
-These are the bits most portfolios don't do. Keeping them performant is the
-design constraint.
+**Gradient text**: `.text-gradient` — cyan→violet linear gradient clipped to
+text. Used on the H1 and the experience-card company names.
 
-1. **WebGL starfield background** — ~2000 instanced points, single draw call.
-   Stars twinkle (sin-wave alpha) and rotate slowly. Mouse position parallaxes
-   the camera by a couple of degrees. Lazy-loaded with `next/dynamic({ ssr: false })`.
-2. **Stardust cursor trail** — small cyan/violet glints spawn behind the
-   cursor on movement and fade out. Subtle. Disabled on touch + reduced motion.
-3. **Constellation skill grid** — skills are nodes; on hover, SVG lines animate
-   between related skills (e.g., React ↔ TypeScript ↔ Next.js).
-4. **Scroll-driven camera depth** — the starfield camera `z` is bound to
-   scroll progress via `useScroll`, so scrolling feels like flying forward
-   through space.
-5. **Glass project cards with 3D tilt** — CSS `perspective` + `rotateX/Y`
-   based on cursor offset; cheap, runs on the compositor.
-6. **Aurora mesh on hero** — slow-shifting conic gradient behind the
-   headline. Pure CSS, no JS.
-7. **Active-section glass nav** — pill that morphs (`layoutId`) between
-   active links via Motion.
+**Type scale**: Geist for body, Space Grotesk (`--font-heading`) for
+`<h1>`/`<h2>`/`<h3>`, slight negative letter-spacing on display sizes.
 
 ---
 
-## Performance guardrails (non-negotiable)
+## The "wow" layer — what shipped vs. what didn't
 
-- **Starfield**: instanced geometry, no per-frame allocations, `frameloop="demand"`
-  when off-screen via IntersectionObserver.
-- **Reduced motion**: `useReducedMotion()` from Motion → skip starfield
-  (replace with a static SVG noise) and disable parallax.
-- **Lazy load Three.js**: `next/dynamic` on the starfield component (saves
-  ~150KB on initial bundle for users who haven't scrolled past hero).
+What shipped:
+
+1. **Glass nav with morphing pill** — Motion `layoutId` slides the active
+   indicator between links. Heavier glass variant once scrolled.
+2. **Glass project cards with 3D tilt** — CSS `perspective` + cursor-driven
+   `rotateX/Y` mutated directly on the DOM (no React re-renders). Cheap;
+   runs on the compositor.
+3. **Cyan→violet halos** behind the hero photo, about photo, and duration
+   rings — soft radial gradients with `blur-3xl` / `blur-2xl`.
+4. **Animated duration rings** — SVG circle with `strokeDasharray` /
+   `strokeDashoffset` animated by Motion when each experience card scrolls
+   into view.
+5. **Scroll cue** — small "Scroll" label + bouncing chevron in the hero.
+6. **Email-to-clipboard Contact button** — `Mail` icon flips to a checkmark
+   for ~2s after click (so visitors without a default mail client still
+   walk away with the address).
+
+What I dropped (and why):
+
+- **WebGL starfield** (`@react-three/fiber` + instanced points). Originally
+  planned, but a seeded-PRNG static SVG with 300 circles got me 95% of the
+  visual at 0% of the JS bundle and zero runtime cost. Dropped the deps.
+- **Cursor stardust trail** — felt fussy and a magnet for jank on lower-end
+  devices. Cut.
+- **Constellation skill grid** — replaced with the experience timeline,
+  which says more about me. The skills section was scaffolding I never
+  needed.
+- **Scroll-driven camera depth** — N/A once the WebGL starfield was cut.
+- **Aurora mesh on hero** — replaced with the simpler radial halo behind
+  the photo.
+
+---
+
+## Performance guardrails (still non-negotiable)
+
+- **Starfield**: server-rendered SVG, single static markup, no JS.
+- **Reduced motion**: a global `@media (prefers-reduced-motion: reduce)`
+  block in `globals.css` collapses every animation/transition to ~0ms.
+  Motion's `whileInView` etc. become no-ops at that duration.
 - **Animations on transform / opacity only** — never `top`/`left`/`width`.
-- **`next/image`** for all project screenshots, with proper `sizes`.
+- **`next/image`** for profile and about photos with explicit `sizes` and
+  `priority` only on the hero.
+- **Scroll listeners** are `{ passive: true }` and only do trivial state
+  flips.
+- **Project tilt** mutates `el.style.transform` in a mousemove handler — no
+  React rerenders.
 - **Lighthouse target**: Performance ≥90, A11y ≥95.
-
----
-
-## Build phases
-
-1. **Scaffold** — Next.js + TypeScript + Tailwind + shadcn, install
-   `motion`, `three`, `@react-three/fiber`, `@react-three/drei`, `next-themes`.
-2. **Foundation** — theme provider, fonts, `globals.css` with the palette,
-   `glass-card.tsx`, `nav.tsx`, `cursor-glow.tsx`.
-3. **Starfield + nebula** — `components/three/starfield.tsx` lazy-loaded into
-   `layout.tsx` as a fixed full-viewport background.
-4. **Hero** — name, tagline, scroll cue. Aurora gradient.
-5. **About** — single glass panel, headshot or initial avatar, 2–3 paragraph
-   bio.
-6. **Skills** — constellation grid sourced from `lib/data.ts`.
-7. **Projects** — glass cards with tilt, link to repo + live demo. Placeholder
-   content first; I'll swap in real projects later.
-8. **Experience** — vertical timeline, glass dots on a gradient line.
-9. **Polish** — mobile responsive (starfield density ↓ on mobile),
-   reduced-motion path, favicon, OG image, `<title>` and meta.
-10. **Deploy** — Vercel, custom domain later if I want one.
-
-Content (skills list, project descriptions, work history) starts as
-placeholders in `lib/data.ts` so the structure is in place — I can swap real
-content in without touching the components.
 
 ---
 
 ## Verification
 
-After implementation:
-
-1. **Visual check** — `npm run dev`, open <http://localhost:3000>, scroll
-   through every section. Confirm stars render, cursor trail spawns, glass
-   panels look frosted, nav highlights active section.
-2. **Performance** — Chrome DevTools Performance tab, record a scroll from
-   top to bottom. Confirm 60fps, no long tasks >50ms.
-3. **Reduced motion** — toggle `prefers-reduced-motion: reduce` in DevTools'
-   rendering panel. Confirm starfield is replaced with the static fallback
-   and parallax is disabled.
-4. **Mobile** — DevTools device emulation (iPhone 14, Pixel 7). Confirm
-   layout stacks, starfield density is reduced, no horizontal scroll.
-5. **Lighthouse** — Performance ≥90, Accessibility ≥95, Best Practices ≥95,
-   SEO ≥95.
-6. **Build** — `npm run build` passes with no TypeScript or ESLint errors.
+1. **Visual check** — `npm run dev`, scroll through every section. Confirm
+   stars render, glass panels look frosted, nav highlights active section
+   and switches to its elevated variant past the hero, project cards tilt
+   on hover, back-to-top fades in, footer year is current.
+2. **Reduced motion** — toggle `prefers-reduced-motion: reduce` in DevTools.
+   Confirm animations and smooth scrolling are disabled.
+3. **Mobile** — DevTools device emulation (iPhone 14, Pixel 7). Confirm
+   layout stacks, hamburger menu opens / closes / closes on outside-click,
+   no horizontal scroll.
+4. **Lighthouse** — Performance ≥90, A11y ≥95, Best Practices ≥95, SEO ≥95.
+5. **Build** — `npm run build` passes with no TypeScript or ESLint errors.
+6. **OG card** — visit `/opengraph-image` directly; share a link in Slack /
+   iMessage / Twitter and confirm the card renders.
 7. **Deploy** — push to Vercel, verify production URL renders identically.
+
+---
+
+## Future work
+
+- **Light-mode toggle** — `next-themes` is already wired; just need a
+  toggle component and a complete light palette pass on `globals.css`.
+- **Real project entries** — `lib/data.ts` currently has one placeholder.
+  Drop screenshots into `public/projects/` and append entries.
+- **Skills section** — possibly. The constellation idea is parked; might
+  return as a small inline strip rather than a full section.

@@ -113,21 +113,29 @@ export const skills = {
  * Set `image` to null to render the styled "Coming soon" placeholder, and
  * `github` to null to render a non-link "Repo coming soon" instead of the
  * GitHub link.
+ *
+ * `imageFit` defaults to "cover" — best for landscape browser screenshots
+ * where minor cropping looks polished. Use "contain" for square / portrait
+ * screenshots (e.g. desktop app windows) where cropping would hide the
+ * subject; the image then sits on the cyan→violet gradient backdrop.
  */
 export type Project = {
   title: string;
   description: string;
   image: string | null;
+  imageFit?: "cover" | "contain";
   github: string | null;
   tags?: readonly string[];
 };
 
 export const projects: readonly Project[] = [
   {
-    title: "Project name pending",
+    title: "Weather App",
     description:
-      "Placeholder card — drop in a screenshot, a short blurb, and a repo link via lib/data.ts and this slot fills in. Add more entries to the array and the grid extends.",
-    image: null,
-    github: null,
+      "Java desktop app that pulls real-time weather data from the Open-Meteo API and surfaces it through a Swing GUI — temperature, wind, and condition icons refreshing every ~2s. Custom HTTP layer (HttpURLConnection) with retry-on-failure to keep flaky network calls from breaking the UI; JSON Simple for parsing the API responses.",
+    image: "/weather-project.png",
+    imageFit: "contain",
+    github: "https://github.com/Jakesquelch/WeatherApp",
+    tags: ["Java", "Swing", "REST API", "JSON"],
   },
 ];

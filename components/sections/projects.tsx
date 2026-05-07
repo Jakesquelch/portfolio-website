@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { ArrowUpRight, FolderGit2 } from "lucide-react";
 import { projects, type Project } from "@/lib/data";
+import { cn } from "@/lib/utils";
 
 /**
  * Projects section — vertical stack of wide horizontal glass cards driven
@@ -112,15 +113,23 @@ function ProjectCard({
         }}
         className="glass group flex flex-col overflow-hidden rounded-2xl md:flex-row md:min-h-[260px] lg:min-h-[280px]"
       >
-        {/* Image / placeholder — full width on mobile, ~40% on md+ */}
-        <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-foreground/10 md:aspect-auto md:w-[42%] md:flex-none md:border-r md:border-b-0">
+        {/* Image / placeholder — full width on mobile, ~40% on md+. The
+            cyan→violet gradient sits behind every image so `imageFit:
+            "contain"` screenshots have a deliberate backdrop in the empty
+            space rather than reading as a sized-wrong asset. */}
+        <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-foreground/10 bg-gradient-to-br from-cyan/15 via-violet/10 to-transparent md:aspect-auto md:w-[42%] md:flex-none md:border-r md:border-b-0">
           {project.image ? (
             <Image
               src={project.image}
               alt={project.title}
               fill
               sizes="(min-width: 768px) 42vw, 100vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              className={cn(
+                "transition-transform duration-500 group-hover:scale-[1.03]",
+                project.imageFit === "contain"
+                  ? "object-contain"
+                  : "object-cover",
+              )}
             />
           ) : (
             <PlaceholderImage />

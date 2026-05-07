@@ -57,6 +57,30 @@ export function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /**
+   * Manual scroll handler for nav links. Bypasses the browser's default hash
+   * navigation, which no-ops when the URL hash already matches the target —
+   * e.g. you click "About", scroll back to the hero by hand, then click
+   * "About" again: the URL is still `#about`, so the browser thinks it's
+   * already there and doesn't scroll. Doing it ourselves avoids that, and
+   * `history.replaceState` keeps the URL in sync without polluting history
+   * with a new entry per click.
+   *
+   * Modifier-clicks (cmd/ctrl/shift, middle-button) fall through to default
+   * behaviour so the browser still handles "open in new tab" sensibly.
+   */
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    id: string,
+  ) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    history.replaceState(null, "", `#${id}`);
+  };
+
   // Close mobile menu when clicking outside or hitting Escape.
   useEffect(() => {
     if (!mobileOpen) return;
@@ -98,6 +122,7 @@ export function Nav() {
             <li key={id} className="relative">
               <Link
                 href={`#${id}`}
+                onClick={(e) => handleNavClick(e, id)}
                 className={cn(
                   "relative block rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
                   isActive
@@ -177,7 +202,10 @@ export function Nav() {
                   <li key={id}>
                     <Link
                       href={`#${id}`}
-                      onClick={() => setMobileOpen(false)}
+                      onClick={(e) => {
+                        handleNavClick(e, id);
+                        setMobileOpen(false);
+                      }}
                       className={cn(
                         "block rounded-xl px-4 py-2.5 text-sm font-medium transition-colors",
                         isActive

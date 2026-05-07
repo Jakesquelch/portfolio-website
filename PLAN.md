@@ -25,7 +25,7 @@ performance.
 | Styling | **Tailwind CSS v4** | Ergonomic for glassmorphism; CSS-variable tokens via `@theme inline` |
 | Animation | **Motion** (formerly Framer Motion) | GPU-accelerated transforms, scroll triggers, layout animations |
 | Background | **Static SVG starfield** | Server-rendered, zero JS — see "Decisions" below |
-| Theme | **`next-themes`** | Currently pinned to dark; toggle planned |
+| Theme | **`next-themes`** | Dark / light toggle (Cosmic + Daybreak palettes) |
 | Icons | **`lucide-react`** + inline brand SVGs | Lucide stopped shipping brand glyphs, so LinkedIn + GitHub are inlined in `components/icons.tsx` |
 | Fonts | **Geist Sans + Geist Mono + Space Grotesk** | Sleek, slightly futuristic; all via `next/font` (no FOUT) |
 | Deploy | **Vercel** | Zero-config |
@@ -56,7 +56,11 @@ Persistent UI rendered from `app/layout.tsx`:
   via Motion `layoutId`. Switches to a heavier elevated glass variant once
   you scroll off the hero so it stays legible. Mobile gets a glass hamburger
   + dropdown.
-- **Starfield** — static SVG, sits behind everything at `-z-20`.
+- **Starfield** — static SVG, sits behind everything at `-z-20`. Hidden in
+  light mode (stars-on-cream reads as a render bug — the body's pastel
+  cyan→violet mist takes over instead).
+- **ThemeToggle** — glass orb in the top-right, sun ↔ moon. Mirrors the
+  back-to-top button's bottom-right position.
 - **BackToTop** — glass orb in the bottom-right that fades in once you've
   scrolled past ~60% of the viewport.
 - **Footer** — faint divider, social icons, dynamic copyright year.
@@ -65,14 +69,30 @@ Persistent UI rendered from `app/layout.tsx`:
 
 ## Design system
 
-Tokens live as CSS variables in `globals.css`, all in **oklch**. The dark
-palette (the only one currently active):
+Tokens live as CSS variables in `globals.css`, all in **oklch**. Two
+themes share the same accent identity but invert their surface treatments.
+
+**Cosmic** (`.dark`, the default):
 
 - Background: deep cosmic indigo `oklch(0.08 0.02 265)`
 - Foreground: cool white `oklch(0.96 0.015 250)`
 - Accent cyan: `oklch(0.86 0.13 220)` (~#7dd3fc)
 - Accent violet: `oklch(0.74 0.16 295)` (~#a78bfa)
 - Glass surface: `oklch(1 0 0 / 4%)` over a 1px `oklch(1 0 0 / 8%)` border
+
+**Daybreak** (light, no `.dark` class):
+
+- Background: warm cream `oklch(0.97 0.01 80)`
+- Foreground: deep cosmic indigo `oklch(0.18 0.04 265)`
+- Accent cyan: `oklch(0.55 0.16 220)` (deepened for contrast on cream)
+- Accent violet: `oklch(0.5 0.18 295)`
+- Glass surface: `oklch(0 0 0 / 4%)` over a 1px `oklch(0 0 0 / 10%)` border —
+  the frost flips from light-on-dark to dark-on-light
+
+**Theme tokens**: glass utilities, halo gradients (behind the photos and
+duration rings), and the body's two-blob nebula all read CSS variables that
+are mirrored across both palettes — utilities don't need theme-aware code,
+they just re-read the same var name when the toggle flips `.dark`.
 
 Behind the starfield SVG, the body has a subtle CSS-only nebula gradient —
 two soft radial blobs (violet top-left, cyan bottom-right) with
@@ -168,7 +188,5 @@ What I dropped (and why):
 
 ## Future work
 
-- **Light-mode toggle** — `next-themes` is already wired; just need a
-  toggle component and a complete light palette pass on `globals.css`.
 - **Real project entries** — `lib/data.ts` currently has one placeholder.
   Drop screenshots into `public/projects/` and append entries.

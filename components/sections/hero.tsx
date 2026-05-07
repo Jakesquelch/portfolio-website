@@ -63,14 +63,14 @@ export function Hero() {
             className="pointer-events-none absolute inset-0 rounded-full blur-3xl"
             style={{
               background:
-                "radial-gradient(circle, oklch(0.86 0.13 220 / 0.45) 0%, oklch(0.74 0.16 295 / 0.28) 45%, transparent 75%)",
+                "radial-gradient(circle, var(--halo-1) 0%, var(--halo-2) 45%, transparent 75%)",
               transform: "scale(1.35)",
             }}
           />
 
           {/* Circular frame: glass-rimmed, soft inset highlight, drop shadow */}
           <div
-            className="relative h-36 w-36 overflow-hidden rounded-full border border-white/15 sm:h-44 sm:w-44 md:h-56 md:w-56 lg:h-72 lg:w-72 xl:h-80 xl:w-80"
+            className="relative h-36 w-36 overflow-hidden rounded-full border border-foreground/15 sm:h-44 sm:w-44 md:h-56 md:w-56 lg:h-72 lg:w-72 xl:h-80 xl:w-80"
             style={{
               boxShadow:
                 "inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 36px rgba(0,0,0,0.4)",
@@ -160,7 +160,7 @@ export function Hero() {
               href={`mailto:${socials.email}`}
               onClick={handleContactClick}
               aria-live="polite"
-              className="glass-strong group ml-1 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-foreground transition-all hover:-translate-y-px hover:bg-white/10 sm:text-base"
+              className="glass-strong group ml-1 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-foreground transition-all hover:-translate-y-px hover:bg-foreground/10 sm:text-base"
             >
               {copied ? (
                 <Check className="h-4 w-4 text-cyan" />
@@ -195,7 +195,7 @@ function SocialIconLink({
       target="_blank"
       rel="noreferrer"
       aria-label={label}
-      className="glass-strong inline-flex h-11 w-11 items-center justify-center rounded-full text-foreground/80 transition-all hover:-translate-y-px hover:bg-white/10 hover:text-foreground"
+      className="glass-strong inline-flex h-11 w-11 items-center justify-center rounded-full text-foreground/80 transition-all hover:-translate-y-px hover:bg-foreground/10 hover:text-foreground"
     >
       {children}
     </a>

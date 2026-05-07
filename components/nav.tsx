@@ -133,7 +133,7 @@ export function Nav() {
                 {isActive && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 -z-10 rounded-full bg-white/10"
+                    className="absolute inset-0 -z-10 rounded-full bg-foreground/10"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                   />
                 )}
@@ -209,8 +209,8 @@ export function Nav() {
                       className={cn(
                         "block rounded-xl px-4 py-2.5 text-sm font-medium transition-colors",
                         isActive
-                          ? "bg-white/10 text-foreground"
-                          : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
+                          ? "bg-foreground/10 text-foreground"
+                          : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground",
                       )}
                     >
                       {label}

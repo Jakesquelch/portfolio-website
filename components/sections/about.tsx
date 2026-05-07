@@ -122,13 +122,13 @@ export function About() {
                 className="pointer-events-none absolute inset-0 rounded-xl blur-2xl"
                 style={{
                   background:
-                    "radial-gradient(circle, oklch(0.86 0.13 220 / 0.35) 0%, oklch(0.74 0.16 295 / 0.2) 50%, transparent 75%)",
+                    "radial-gradient(circle, var(--halo-1) 0%, var(--halo-2) 50%, transparent 75%)",
                   transform: "scale(1.3)",
                 }}
               />
               {/* Frame */}
               <div
-                className="relative aspect-[3/4] w-full overflow-hidden rounded-xl border border-white/15"
+                className="relative aspect-[3/4] w-full overflow-hidden rounded-xl border border-foreground/15"
                 style={{
                   boxShadow:
                     "inset 0 1px 0 rgba(255,255,255,0.14), 0 10px 28px rgba(0,0,0,0.4)",
@@ -159,7 +159,7 @@ export function About() {
             whileInView={{ opacity: 1, scaleX: 1 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.9, delay: 0.1, ease: "easeOut" }}
-            className="my-10 h-px origin-center bg-gradient-to-r from-transparent via-white/15 to-transparent lg:my-14"
+            className="my-10 h-px origin-center bg-gradient-to-r from-transparent via-foreground/15 to-transparent lg:my-14"
           />
 
           {/* ---------- Bottom: experience timeline ---------- */}
@@ -188,7 +188,7 @@ export function About() {
             whileInView={{ opacity: 1, scaleX: 1 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.9, delay: 0.1, ease: "easeOut" }}
-            className="my-10 h-px origin-center bg-gradient-to-r from-transparent via-white/15 to-transparent lg:my-14"
+            className="my-10 h-px origin-center bg-gradient-to-r from-transparent via-foreground/15 to-transparent lg:my-14"
           />
 
           {/* ---------- Bottom: skills ---------- */}
@@ -292,7 +292,7 @@ function SkillGroup({
           return (
             <span
               key={item}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-sm font-medium text-foreground/80 transition-all hover:-translate-y-px hover:border-white/25 hover:bg-white/[0.06] hover:text-foreground"
+              className="inline-flex items-center gap-1.5 rounded-full border border-foreground/10 bg-foreground/[0.04] px-3 py-1 text-sm font-medium text-foreground/80 transition-all hover:-translate-y-px hover:border-foreground/25 hover:bg-foreground/[0.06] hover:text-foreground"
             >
               {Icon && <Icon color="default" size={14} aria-hidden />}
               {item}
@@ -322,7 +322,7 @@ function ExperienceCard({ exp, index }: { exp: Experience; index: number }) {
         delay: 0.25 + index * 0.18,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group relative flex flex-1 flex-col items-center gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center transition-all hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.05] md:p-7"
+      className="group relative flex flex-1 flex-col items-center gap-4 rounded-xl border border-foreground/10 bg-foreground/[0.03] p-6 text-center transition-all hover:-translate-y-0.5 hover:border-foreground/20 hover:bg-foreground/[0.05] md:p-7"
     >
       <DurationRing months={exp.months} label={exp.durationLabel} />
 
@@ -370,7 +370,7 @@ function DurationRing({ months, label }: { months: number; label: string }) {
         className="pointer-events-none absolute inset-0 -m-3 rounded-full blur-2xl"
         style={{
           background:
-            "radial-gradient(circle, oklch(0.86 0.13 220 / 0.3) 0%, oklch(0.74 0.16 295 / 0.18) 50%, transparent 75%)",
+            "radial-gradient(circle, var(--halo-1) 0%, var(--halo-2) 50%, transparent 75%)",
         }}
       />
       <div className="relative h-24 w-24">
@@ -382,8 +382,8 @@ function DurationRing({ months, label }: { months: number; label: string }) {
         >
           <defs>
             <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="oklch(0.86 0.13 220)" />
-              <stop offset="100%" stopColor="oklch(0.74 0.16 295)" />
+              <stop offset="0%" style={{ stopColor: "var(--accent-cyan)" }} />
+              <stop offset="100%" style={{ stopColor: "var(--accent-violet)" }} />
             </linearGradient>
           </defs>
           {/* Track */}
@@ -391,7 +391,8 @@ function DurationRing({ months, label }: { months: number; label: string }) {
             cx="50"
             cy="50"
             r={radius}
-            stroke="oklch(1 0 0 / 0.08)"
+            stroke="currentColor"
+            strokeOpacity="0.12"
             strokeWidth="4"
             fill="none"
           />

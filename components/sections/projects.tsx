@@ -113,7 +113,7 @@ function ProjectCard({
         className="glass group flex flex-col overflow-hidden rounded-2xl md:flex-row md:min-h-[260px] lg:min-h-[280px]"
       >
         {/* Image / placeholder — full width on mobile, ~40% on md+ */}
-        <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/10 md:aspect-auto md:w-[42%] md:flex-none md:border-r md:border-b-0">
+        <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-foreground/10 md:aspect-auto md:w-[42%] md:flex-none md:border-r md:border-b-0">
           {project.image ? (
             <Image
               src={project.image}
@@ -141,7 +141,7 @@ function ProjectCard({
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-0.5 text-xs font-medium text-foreground/75"
+                  className="rounded-full border border-foreground/10 bg-foreground/[0.04] px-2.5 py-0.5 text-xs font-medium text-foreground/75"
                 >
                   {tag}
                 </span>
@@ -183,7 +183,7 @@ function PlaceholderImage() {
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-cyan/15 via-violet/10 to-transparent">
       <FolderGit2 className="h-14 w-14 text-foreground/30" strokeWidth={1.5} />
-      <span className="absolute right-3 bottom-3 rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-0.5 text-[0.7rem] font-medium text-foreground/70 backdrop-blur-sm">
+      <span className="absolute right-3 bottom-3 rounded-full border border-foreground/10 bg-foreground/[0.06] px-2.5 py-0.5 text-[0.7rem] font-medium text-foreground/70 backdrop-blur-sm">
         Coming soon
       </span>
     </div>

@@ -49,45 +49,86 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* -------------------------------------------------------------------------
+ * Daybreak palette — warm cream + dark-tinted glass + cyan/violet accents.
+ *
+ * Light mode is the default (no `.dark` class). Accents are deepened from
+ * their dark-mode values so they keep contrast against the cream background.
+ *
+ * Glass / halo / body-tint tokens are theme-scoped here so each utility and
+ * inline-styled gradient can reference them by name and theme automatically
+ * when the user toggles. The dark-mode block below mirrors every token.
+ * ----------------------------------------------------------------------- */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --background: oklch(0.97 0.01 80);
+  --foreground: oklch(0.18 0.04 265);
+  --card: oklch(0 0 0 / 4%);
+  --card-foreground: oklch(0.18 0.04 265);
+  --popover: oklch(0.97 0.01 80);
+  --popover-foreground: oklch(0.18 0.04 265);
+  --primary: oklch(0.55 0.16 220);
+  --primary-foreground: oklch(0.97 0.01 80);
+  --secondary: oklch(0 0 0 / 5%);
+  --secondary-foreground: oklch(0.18 0.04 265);
+  --muted: oklch(0 0 0 / 4%);
+  --muted-foreground: oklch(0.4 0.03 260);
+  --accent: oklch(0.5 0.18 295);
+  --accent-foreground: oklch(0.18 0.04 265);
+  --destructive: oklch(0.55 0.22 25);
+  --border: oklch(0 0 0 / 10%);
+  --input: oklch(0 0 0 / 12%);
+  --ring: oklch(0.55 0.16 220 / 50%);
+  --chart-1: oklch(0.55 0.16 220);
+  --chart-2: oklch(0.5 0.18 295);
+  --chart-3: oklch(0.55 0.18 180);
+  --chart-4: oklch(0.5 0.18 320);
+  --chart-5: oklch(0.45 0.2 250);
   --radius: 0.75rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  --accent-cyan: oklch(0.86 0.13 220);
-  --accent-violet: oklch(0.74 0.16 295);
+  --sidebar: oklch(0.95 0.015 80);
+  --sidebar-foreground: oklch(0.18 0.04 265);
+  --sidebar-primary: oklch(0.55 0.16 220);
+  --sidebar-primary-foreground: oklch(0.97 0.01 80);
+  --sidebar-accent: oklch(0 0 0 / 5%);
+  --sidebar-accent-foreground: oklch(0.18 0.04 265);
+  --sidebar-border: oklch(0 0 0 / 10%);
+  --sidebar-ring: oklch(0.55 0.16 220 / 50%);
+  --accent-cyan: oklch(0.55 0.16 220);
+  --accent-violet: oklch(0.5 0.18 295);
+
+  /* Glass surface tokens — light mode uses dark-tinted translucent panels
+     because frosted-white-on-white reads as nothing. */
+  --glass-bg: oklch(0 0 0 / 4%);
+  --glass-border: oklch(0 0 0 / 10%);
+  --glass-highlight: oklch(0 0 0 / 4%);
+  --glass-shadow: oklch(0 0 0 / 12%);
+  --glass-strong-bg: oklch(0.97 0.01 80 / 70%);
+  --glass-strong-border: oklch(0 0 0 / 12%);
+  --glass-strong-highlight: oklch(0 0 0 / 6%);
+  --glass-strong-shadow: oklch(0 0 0 / 14%);
+  --glass-strong-elevated-bg: oklch(0.97 0.01 80 / 88%);
+  --glass-strong-elevated-border: oklch(0 0 0 / 16%);
+  --glass-strong-elevated-highlight: oklch(0 0 0 / 8%);
+  --glass-strong-elevated-shadow: oklch(0 0 0 / 18%);
+
+  /* Halo tokens used for the cosmic glow behind photos / duration rings. */
+  --halo-1: oklch(0.55 0.16 220 / 35%);
+  --halo-2: oklch(0.5 0.18 295 / 22%);
+
+  /* Body backdrop — soft pastel cyan→violet mist replacing the starfield. */
+  --bg-tint-1: oklch(0.5 0.18 295 / 14%);
+  --bg-tint-2: oklch(0.55 0.16 220 / 12%);
+
+  /* Scrollbar */
+  --scrollbar-thumb: oklch(0 0 0 / 14%);
+  --scrollbar-thumb-hover: oklch(0 0 0 / 24%);
 }
 
+/* -------------------------------------------------------------------------
+ * Cosmic palette — deep space + light-tinted glass + cyan/violet accents.
+ * The original aesthetic; values mirror Daybreak's so utilities can switch
+ * theme by re-reading the same var names.
+ * ----------------------------------------------------------------------- */
 .dark {
-  /* Cosmic palette — deep space + glass surfaces + cyan/violet accents */
   --background: oklch(0.08 0.02 265);
   --foreground: oklch(0.96 0.015 250);
   --card: oklch(1 0 0 / 4%);
@@ -121,6 +162,28 @@
   --sidebar-ring: oklch(0.86 0.13 220 / 50%);
   --accent-cyan: oklch(0.86 0.13 220);
   --accent-violet: oklch(0.74 0.16 295);
+
+  --glass-bg: oklch(1 0 0 / 4%);
+  --glass-border: oklch(1 0 0 / 8%);
+  --glass-highlight: oklch(1 0 0 / 8%);
+  --glass-shadow: oklch(0 0 0 / 30%);
+  --glass-strong-bg: oklch(0.12 0.025 265 / 60%);
+  --glass-strong-border: oklch(1 0 0 / 10%);
+  --glass-strong-highlight: oklch(1 0 0 / 10%);
+  --glass-strong-shadow: oklch(0 0 0 / 40%);
+  --glass-strong-elevated-bg: oklch(0.12 0.025 265 / 82%);
+  --glass-strong-elevated-border: oklch(1 0 0 / 14%);
+  --glass-strong-elevated-highlight: oklch(1 0 0 / 12%);
+  --glass-strong-elevated-shadow: oklch(0 0 0 / 55%);
+
+  --halo-1: oklch(0.86 0.13 220 / 45%);
+  --halo-2: oklch(0.74 0.16 295 / 28%);
+
+  --bg-tint-1: oklch(0.74 0.16 295 / 18%);
+  --bg-tint-2: oklch(0.86 0.13 220 / 14%);
+
+  --scrollbar-thumb: oklch(1 0 0 / 8%);
+  --scrollbar-thumb-hover: oklch(1 0 0 / 14%);
 }
 
 @layer base {
@@ -138,20 +201,26 @@
 
   body {
     @apply bg-background text-foreground;
-    /* Subtle nebula gradient that sits behind everything (visible until the
-       WebGL starfield loads). Pure CSS, zero JS cost. */
+    /* Subtle nebula gradient that sits behind everything. Themed via vars
+       so the same two-blob layout works in light and dark mode. */
     background-image:
       radial-gradient(
         ellipse 80% 60% at 20% 0%,
-        oklch(0.74 0.16 295 / 18%) 0%,
+        var(--bg-tint-1) 0%,
         transparent 60%
       ),
       radial-gradient(
         ellipse 70% 50% at 80% 100%,
-        oklch(0.86 0.13 220 / 14%) 0%,
+        var(--bg-tint-2) 0%,
         transparent 60%
       );
     background-attachment: fixed;
+    /* Cross-fade body bg + text colour when toggling theme — the rest of
+       the page (glass panels, halos, etc.) inherit this via their own
+       `transition-colors` / `transition-all` classes where set. */
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
   }
 
   h1,
@@ -170,11 +239,11 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: oklch(1 0 0 / 8%);
+    background: var(--scrollbar-thumb);
     border-radius: 999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: oklch(1 0 0 / 14%);
+    background: var(--scrollbar-thumb-hover);
   }
 }
 
@@ -182,47 +251,49 @@
 
 /* Glass surface — frosted, translucent, faint inner highlight.
    Use as: <div class="glass">…</div>
-   Built on backdrop-filter (GPU-accelerated). */
+   Built on backdrop-filter (GPU-accelerated). Theme tokens flip the
+   frost from light-on-dark to dark-on-light when `.dark` is removed. */
 @utility glass {
-  background-color: oklch(1 0 0 / 4%);
-  border: 1px solid oklch(1 0 0 / 8%);
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   backdrop-filter: blur(20px) saturate(140%);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   box-shadow:
-    inset 0 1px 0 oklch(1 0 0 / 8%),
-    0 8px 32px oklch(0 0 0 / 30%);
+    inset 0 1px 0 var(--glass-highlight),
+    0 8px 32px var(--glass-shadow);
 }
 
 /* Stronger glass — for nav bars, modals */
 @utility glass-strong {
-  background-color: oklch(0.12 0.025 265 / 60%);
-  border: 1px solid oklch(1 0 0 / 10%);
+  background-color: var(--glass-strong-bg);
+  border: 1px solid var(--glass-strong-border);
   backdrop-filter: blur(28px) saturate(160%);
   -webkit-backdrop-filter: blur(28px) saturate(160%);
   box-shadow:
-    inset 0 1px 0 oklch(1 0 0 / 10%),
-    0 8px 32px oklch(0 0 0 / 40%);
+    inset 0 1px 0 var(--glass-strong-highlight),
+    0 8px 32px var(--glass-strong-shadow);
 }
 
 /* Elevated variant of glass-strong — bumped opacity, stronger rim, deeper
    shadow. Applied to the floating nav once the user scrolls past the hero
    so the pill stays legible against busy section content underneath. */
 @utility glass-strong-elevated {
-  background-color: oklch(0.12 0.025 265 / 82%);
-  border: 1px solid oklch(1 0 0 / 14%);
+  background-color: var(--glass-strong-elevated-bg);
+  border: 1px solid var(--glass-strong-elevated-border);
   backdrop-filter: blur(28px) saturate(160%);
   -webkit-backdrop-filter: blur(28px) saturate(160%);
   box-shadow:
-    inset 0 1px 0 oklch(1 0 0 / 12%),
-    0 10px 36px oklch(0 0 0 / 55%);
+    inset 0 1px 0 var(--glass-strong-elevated-highlight),
+    0 10px 36px var(--glass-strong-elevated-shadow);
 }
 
-/* Gradient text — cyan to violet */
+/* Gradient text — cyan to violet. References the accent vars so each
+   theme's deepened/lightened cyan + violet flow through automatically. */
 @utility text-gradient {
   background: linear-gradient(
     135deg,
-    oklch(0.86 0.13 220) 0%,
-    oklch(0.74 0.16 295) 100%
+    var(--accent-cyan) 0%,
+    var(--accent-violet) 100%
   );
   -webkit-background-clip: text;
   background-clip: text;

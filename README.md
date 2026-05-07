@@ -8,7 +8,7 @@ glass-on-starfield site built with Next.js 16.
 - **Next.js 16** (App Router) + **React 19** + **TypeScript**
 - **Tailwind CSS v4** with shadcn-style CSS variables
 - **Motion** (formerly Framer Motion) for entrance + scroll animations
-- **next-themes** (currently pinned to dark; toggle planned)
+- **next-themes** (dark by default, with a top-right toggle to light)
 - **Geist Sans + Geist Mono + Space Grotesk** via `next/font`
 - Deployed on **Vercel**
 
@@ -33,7 +33,10 @@ Plus three persistent UI elements rendered from `app/layout.tsx`:
   hamburger dropdown.
 - **Starfield** (`components/starfield-svg.tsx`) — 300 SVG circles at fixed
   percentage coordinates, generated once at module load via a seeded PRNG.
-  Server component, zero JS shipped.
+  Server component, zero JS shipped. Hidden in light mode.
+- **ThemeToggle** (`components/theme-toggle.tsx`) — fixed glass orb in the
+  top-right that swaps between the Cosmic (dark) and Daybreak (light)
+  palettes. Sun ↔ moon icon cross-fade.
 - **BackToTop** (`components/back-to-top.tsx`) — glass orb that fades in once
   the user scrolls past ~60% of the viewport height.
 - **Footer** (`components/footer.tsx`) — divider, socials, copyright.
@@ -97,7 +100,10 @@ public/
 
 Defined in `app/globals.css`:
 
-- Palette in oklch — deep cosmic indigo background, cyan + violet accents.
+- Two oklch palettes, **Cosmic** (dark / default) and **Daybreak** (light) —
+  same cyan/violet accent identity, opposite surface treatments. Glass,
+  halos and body backdrop reference theme-scoped CSS variables so utilities
+  flip automatically when the theme toggles.
 - `.glass`, `.glass-strong`, `.glass-strong-elevated` — three escalating
   frosted-glass utilities (translucent fill + backdrop-blur + inset highlight
   + drop shadow). The "elevated" variant is what the nav switches to once you

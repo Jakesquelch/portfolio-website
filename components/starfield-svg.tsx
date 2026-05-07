@@ -12,6 +12,11 @@
  *
  * This is a Server Component — the SVG is fully rendered at build time and
  * shipped as static HTML. Zero JS bundle cost.
+ *
+ * Visibility is theme-scoped: `hidden dark:block` keeps the starfield in
+ * dark mode only. In light mode the body's pastel cyan→violet mist
+ * (defined in globals.css) takes over — stars on a cream background read
+ * as a rendering bug rather than ambience.
  */
 
 interface Star {
@@ -78,7 +83,7 @@ export function StarfieldSVG() {
   return (
     <svg
       aria-hidden
-      className="pointer-events-none fixed inset-0 -z-20 h-full w-full"
+      className="pointer-events-none fixed inset-0 -z-20 hidden h-full w-full dark:block"
       xmlns="http://www.w3.org/2000/svg"
     >
       {STARS.map((s, i) => (

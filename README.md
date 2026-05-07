@@ -19,8 +19,9 @@ The page is composed in `app/page.tsx` as a single column:
 1. **Hero** (`components/sections/hero.tsx`) — circular profile picture, name in
    gradient text, tagline, social row + Contact button (which copies the email
    to clipboard alongside the `mailto:` navigation).
-2. **About** (`components/sections/about.tsx`) — bio + photo, then an embedded
-   experience timeline with circular duration rings.
+2. **About** (`components/sections/about.tsx`) — bio + photo, an embedded
+   experience timeline with circular duration rings, and a skills block (three
+   chip-row groups: languages / frameworks / tools).
 3. **Projects** (`components/sections/projects.tsx`) — vertical stack of wide
    horizontal glass cards with a 3D mouse-tilt on hover.
 
@@ -45,6 +46,8 @@ All copy + data lives in [`lib/data.ts`](lib/data.ts):
 - `about.heading` + `about.paragraphs` — bio.
 - `experiences[]` — each renders as a card with a duration ring.
   `months / 12` controls how far the gradient stroke wraps.
+- `skills.groups[]` — each group is a labelled row of chips (e.g.
+  "Programming Languages"). Append a group object to add a new row.
 - `projects[]` — each renders as a horizontal card. Set `image` or `github`
   to `null` to render the placeholder / "coming soon" fallbacks.
 

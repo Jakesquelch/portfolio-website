@@ -71,6 +71,34 @@ export const experiences = [
   },
 ] as const satisfies readonly Experience[];
 
+// ---------- Skills --------------------------------------------------------
+
+/**
+ * Skills are grouped (languages / frameworks / tools) and rendered as a
+ * stack of chip rows under the experience timeline. Order within each group
+ * is rendered as-is — list the things you most want highlighted first.
+ *
+ * To add a new group: append an entry to `skills.groups`. The component
+ * iterates the array, so no markup change required.
+ */
+export const skills = {
+  heading: "Skills",
+  groups: [
+    {
+      label: "Programming Languages",
+      items: ["Python", "Java", "C++", "JavaScript", "TypeScript", "PHP"],
+    },
+    {
+      label: "Frameworks & Libraries",
+      items: ["React", "Node.js", "Tailwind CSS", "Bootstrap"],
+    },
+    {
+      label: "Technologies & Tools",
+      items: ["Git", "Docker", "Kubernetes", "MySQL", "PyTest", "Unix"],
+    },
+  ],
+} as const;
+
 // ---------- Projects ------------------------------------------------------
 
 /**

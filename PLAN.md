@@ -42,7 +42,10 @@ Single-page composition (`app/page.tsx`):
 2. **About** — heading + glass card containing photo, bio paragraphs, an
    internal divider, then an embedded experience timeline. Each role renders
    as a card with a circular **duration ring** (gradient stroke wraps
-   `months / 12` of the way around) joined by a gradient connector.
+   `months / 12` of the way around) joined by a gradient connector. A second
+   divider closes off the experience block, then a **skills** subsection:
+   three labelled chip rows (languages / frameworks / tools) sourced from
+   `skills.groups` in `lib/data.ts`.
 3. **Projects** — vertical stack of wide horizontal glass cards. Image on
    the left, content on the right (stacks on mobile). Each card has a 3D
    mouse-tilt on hover.
@@ -169,5 +172,3 @@ What I dropped (and why):
   toggle component and a complete light palette pass on `globals.css`.
 - **Real project entries** — `lib/data.ts` currently has one placeholder.
   Drop screenshots into `public/projects/` and append entries.
-- **Skills section** — possibly. The constellation idea is parked; might
-  return as a small inline strip rather than a full section.

@@ -1,9 +1,61 @@
 "use client";
 
-import { useId } from "react";
+import { useId, type ComponentType, type SVGProps } from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
-import { about, experiences, type Experience } from "@/lib/data";
+import {
+  SiBootstrap,
+  SiCplusplus,
+  SiDocker,
+  SiGit,
+  SiJavascript,
+  SiKubernetes,
+  SiLinux,
+  SiMysql,
+  SiNodedotjs,
+  SiOpenjdk,
+  SiPhp,
+  SiPytest,
+  SiPython,
+  SiReact,
+  SiTailwindcss,
+  SiTypescript,
+} from "@icons-pack/react-simple-icons";
+import { about, experiences, skills, type Experience } from "@/lib/data";
+
+/**
+ * Mapping from a skill name (as listed in `lib/data.ts`) to its
+ * brand-coloured icon. The chip renders the icon at 14px with
+ * `color="default"` so each one ships in its official brand colour.
+ *
+ * Notes:
+ * - simple-icons has no "Java" entry (Oracle trademark), so we use OpenJDK.
+ * - simple-icons has no "Unix" entry, so Linux serves as the closest match.
+ * - Skills not present in the map render with no icon and the chip layout
+ *   adjusts automatically (the icon slot is conditional).
+ */
+type IconComponent = ComponentType<
+  { color?: string; size?: number; title?: string } & SVGProps<SVGSVGElement>
+>;
+
+const SKILL_ICONS: Record<string, IconComponent> = {
+  Python: SiPython,
+  Java: SiOpenjdk,
+  "C++": SiCplusplus,
+  JavaScript: SiJavascript,
+  TypeScript: SiTypescript,
+  PHP: SiPhp,
+  React: SiReact,
+  "Node.js": SiNodedotjs,
+  "Tailwind CSS": SiTailwindcss,
+  Bootstrap: SiBootstrap,
+  Git: SiGit,
+  Docker: SiDocker,
+  Kubernetes: SiKubernetes,
+  MySQL: SiMysql,
+  PyTest: SiPytest,
+  Unix: SiLinux,
+};
 
 /**
  * About section — combines the bio (heading + photo + paragraphs) with a
@@ -14,16 +66,21 @@ import { about, experiences, type Experience } from "@/lib/data";
  * mobile). The card's max-width is 5xl on lg+ so the wider layout has
  * breathing room.
  *
- * Bottom half: a subtle gradient divider, then a "Where I've worked"
- * subheading, then a row of glass experience cards. Each card has a circular
- * duration ring that fills proportionally to months worked (capped at 12 =
- * full). On md+ the cards sit side-by-side with a glowing gradient connector
- * between them; on mobile they stack with a vertical connector.
+ * Middle: a subtle gradient divider, then a "Where I've worked" subheading,
+ * then a row of glass experience cards. Each card has a circular duration
+ * ring that fills proportionally to months worked (capped at 12 = full). On
+ * md+ the cards sit side-by-side with a glowing gradient connector between
+ * them; on mobile they stack with a vertical connector.
+ *
+ * Bottom: another divider, then a "Skills" subheading and three grouped
+ * chip rows (languages / frameworks / tools) sourced from `skills` in
+ * `lib/data.ts`. Groups render in the order declared.
  *
  * Scroll behaviour: heading and outer card fade up when the section enters
- * the viewport. Photo, paragraphs, divider, subheading, and each experience
- * card stagger in at increasing delays so the eye reads top-to-bottom and
- * left-to-right. Animations fire once (won't re-trigger on re-scroll).
+ * the viewport. Each subsequent piece (photo, paragraphs, divider,
+ * subheadings, experience cards, skill groups) staggers in at increasing
+ * delays so the eye reads top-to-bottom. Animations fire once (won't
+ * re-trigger on re-scroll).
  */
 export function About() {
   return (
@@ -123,9 +180,127 @@ export function About() {
               <ExperienceCard exp={experiences[1]} index={1} />
             </div>
           </div>
+
+          {/* ---------- Internal divider ---------- */}
+          <motion.div
+            aria-hidden
+            initial={{ opacity: 0, scaleX: 0 }}
+            whileInView={{ opacity: 1, scaleX: 1 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.9, delay: 0.1, ease: "easeOut" }}
+            className="my-10 h-px origin-center bg-gradient-to-r from-transparent via-white/15 to-transparent lg:my-14"
+          />
+
+          {/* ---------- Bottom: skills ---------- */}
+          <div className="flex flex-col items-center gap-8 lg:gap-10">
+            <motion.h3
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="font-heading text-2xl font-semibold tracking-tight text-foreground md:text-3xl"
+            >
+              {skills.heading}
+            </motion.h3>
+
+            <div className="flex w-full flex-col items-center gap-7 lg:gap-9">
+              {skills.groups.map((group, i) => (
+                <SkillGroup
+                  key={group.label}
+                  label={group.label}
+                  items={group.items}
+                  index={i}
+                />
+              ))}
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Brand wordmark rendered next to the company name in each experience
+ * card. Logos are dropped in /public and sized by height — the natural
+ * width/height props give next/image the aspect ratio for layout-shift
+ * avoidance, then `h-7 w-auto md:h-8` scales them to match the gradient
+ * heading they sit beside.
+ */
+function CompanyLogo({ company }: { company: string }) {
+  if (company === "IBM") {
+    return (
+      <Image
+        src="/ibm.png"
+        alt="IBM logo"
+        width={1280}
+        height={478}
+        className="h-8 w-auto md:h-10"
+      />
+    );
+  }
+  if (company === "Civico") {
+    return (
+      <Image
+        src="/civico.png"
+        alt="Civico logo"
+        width={502}
+        height={150}
+        className="h-8 w-auto md:h-10"
+      />
+    );
+  }
+  return null;
+}
+
+/**
+ * One row of the skills block — a small uppercase category label above a
+ * wrapped row of pill-style chips. Centred horizontally so the three groups
+ * stack as a tidy column under the "Skills" heading.
+ *
+ * `index` controls the entrance delay so each group lands a beat after the
+ * one above. Hover lifts each chip a hair and brightens its rim — same idiom
+ * as the experience cards, just understated.
+ */
+function SkillGroup({
+  label,
+  items,
+  index,
+}: {
+  label: string;
+  items: readonly string[];
+  index: number;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{
+        duration: 0.7,
+        delay: 0.15 + index * 0.12,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="flex flex-col items-center gap-3"
+    >
+      <span className="text-[0.7rem] font-medium uppercase tracking-[0.2em] text-foreground/55">
+        {label}
+      </span>
+      <div className="flex flex-wrap justify-center gap-2">
+        {items.map((item) => {
+          const Icon = SKILL_ICONS[item];
+          return (
+            <span
+              key={item}
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-sm font-medium text-foreground/80 transition-all hover:-translate-y-px hover:border-white/25 hover:bg-white/[0.06] hover:text-foreground"
+            >
+              {Icon && <Icon color="default" size={14} aria-hidden />}
+              {item}
+            </span>
+          );
+        })}
+      </div>
+    </motion.div>
   );
 }
 
@@ -151,9 +326,9 @@ function ExperienceCard({ exp, index }: { exp: Experience; index: number }) {
     >
       <DurationRing months={exp.months} label={exp.durationLabel} />
 
-      <div className="flex flex-col items-center gap-1">
-        <h4 className="text-gradient font-heading text-2xl font-semibold tracking-tight md:text-3xl">
-          {exp.company}
+      <div className="flex flex-col items-center gap-2">
+        <h4 className="flex items-center justify-center">
+          <CompanyLogo company={exp.company} />
         </h4>
         <p className="text-sm font-medium text-foreground/85 md:text-base">
           {exp.role}

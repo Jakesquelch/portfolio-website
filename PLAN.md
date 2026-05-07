@@ -38,7 +38,7 @@ Single-page composition (`app/page.tsx`):
 
 1. **Hero** — profile picture inside a glass medallion with a cyan→violet
    halo behind it, name in gradient text, tagline, social row (LinkedIn,
-   GitHub, Contact-me button that copies the email to clipboard), scroll cue.
+   GitHub, Contact-me button that copies the email to clipboard).
 2. **About** — heading + glass card containing photo, bio paragraphs, an
    internal divider, then an embedded experience timeline. Each role renders
    as a card with a circular **duration ring** (gradient stroke wraps
@@ -107,8 +107,7 @@ What shipped:
 4. **Animated duration rings** — SVG circle with `strokeDasharray` /
    `strokeDashoffset` animated by Motion when each experience card scrolls
    into view.
-5. **Scroll cue** — small "Scroll" label + bouncing chevron in the hero.
-6. **Email-to-clipboard Contact button** — `Mail` icon flips to a checkmark
+5. **Email-to-clipboard Contact button** — `Mail` icon flips to a checkmark
    for ~2s after click (so visitors without a default mail client still
    walk away with the address).
 

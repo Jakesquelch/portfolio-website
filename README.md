@@ -18,7 +18,7 @@ The page is composed in `app/page.tsx` as a single column:
 
 1. **Hero** (`components/sections/hero.tsx`) — circular profile picture, name in
    gradient text, tagline, social row + Contact button (which copies the email
-   to clipboard alongside the `mailto:` navigation), scroll cue.
+   to clipboard alongside the `mailto:` navigation).
 2. **About** (`components/sections/about.tsx`) — bio + photo, then an embedded
    experience timeline with circular duration rings.
 3. **Projects** (`components/sections/projects.tsx`) — vertical stack of wide

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
-import { Check, ChevronDown, Mail } from "lucide-react";
+import { Check, Mail } from "lucide-react";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 import { socials } from "@/lib/data";
 
@@ -172,27 +172,6 @@ export function Hero() {
           </motion.div>
         </div>
       </div>
-
-      {/* Scroll cue — small "Scroll" label + bouncing chevron pinned to the
-          bottom-centre of the hero. Fades in after the rest of the entrance,
-          and the chevron does a gentle vertical bob so it reads as live. */}
-      <motion.div
-        aria-hidden
-        initial={{ opacity: 0, y: -6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.1, ease: "easeOut" }}
-        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-1.5 text-foreground/45 sm:flex"
-      >
-        <span className="text-[0.65rem] font-medium uppercase tracking-[0.25em]">
-          Scroll
-        </span>
-        <motion.div
-          animate={{ y: [0, 5, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <ChevronDown className="h-5 w-5" strokeWidth={2.5} />
-        </motion.div>
-      </motion.div>
     </section>
   );
 }

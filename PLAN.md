@@ -188,5 +188,5 @@ What I dropped (and why):
 
 ## Future work
 
-- **Real project entries** — `lib/data.ts` currently has one placeholder.
-  Drop screenshots into `public/projects/` and append entries.
+- **More project entries** — `lib/data.ts` currently has the Weather App.
+  Drop additional screenshots into `public/` and append entries.

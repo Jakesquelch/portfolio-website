@@ -135,7 +135,7 @@ export function About() {
                 }}
               >
                 <Image
-                  src="/about-pic.png"
+                  src="/about-pic.webp"
                   alt="Jake Squelch"
                   fill
                   sizes="(min-width: 1024px) 240px, (min-width: 768px) 192px, 208px"

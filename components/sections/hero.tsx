@@ -12,7 +12,7 @@ import { socials } from "@/lib/data";
  * name + tagline + social row on the right. On mobile the picture stacks
  * above the text block.
  *
- * The picture is loaded from /profile-pic.png. It's circularly cropped via
+ * The picture is loaded from /profile-pic.webp. It's circularly cropped via
  * overflow-hidden, with object-fit: cover so it fills the circle.
  * `objectPosition: "center 22%"` biases the crop upward — the head sits
  * centred and the bottom of the circle lands roughly just below the
@@ -77,7 +77,7 @@ export function Hero() {
             }}
           >
             <Image
-              src="/profile-pic.png"
+              src="/profile-pic.webp"
               alt="Jake Squelch"
               fill
               priority

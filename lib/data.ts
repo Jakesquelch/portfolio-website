@@ -105,9 +105,9 @@ export const skills = {
  * Each project renders as a glass card with a screenshot, blurb, and a link
  * to the repo.
  *
- * To add a real project: drop a screenshot in `public/projects/` (any
- * reasonable aspect ratio — the card crops to 16:10), then add an object to
- * the `projects` array below. The grid grows to fill, no component changes
+ * To add a real project: drop a screenshot in `public/` (any reasonable
+ * aspect ratio — the card crops to 16:10), then add an object to the
+ * `projects` array below. The grid grows to fill, no component changes
  * needed.
  *
  * Set `image` to null to render the styled "Coming soon" placeholder, and

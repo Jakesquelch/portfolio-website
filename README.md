@@ -92,8 +92,8 @@ lib/
   data.ts                 # all site copy as typed data
   utils.ts                # cn() helper
 public/
-  profile-pic.png         # used in Hero
-  about-pic.png           # used in About
+  profile-pic.webp        # used in Hero
+  about-pic.webp          # used in About
 ```
 
 ## Design system

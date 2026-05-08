@@ -21,8 +21,9 @@ export const socials = {
 export const about = {
   heading: "About",
   paragraphs: [
-    "Hello, I'm Jake! A final-year Computer Science student studying at Aston University in Birmingham. I work across the stack — for now I'm doing everything from low-level backend to UI work.",
-    "Outside of work I like to play golf (usually only when the weather is good!), meet up with friends, and the gym fills in the rest of my time.",
+    "Hello, I'm Jake! A final-year Computer Science student studying in Birmingham. I work across the stack — for now I'm doing everything from low-level backend to UI work.",
+    "I recently completed a year long placement with IBM working on Ceph Storage which I really enjoyed.",
+    "I'm currently looking for a graduate role and exploring which opportunities there are for me!",
   ],
 } as const;
 

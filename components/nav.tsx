@@ -107,7 +107,7 @@ export function Nav() {
   return (
     <nav
       ref={navRef}
-      className="fixed top-4 left-1/2 z-50 -translate-x-1/2"
+      className="fixed top-4 left-5 z-50 sm:left-7 md:left-1/2 md:-translate-x-1/2"
     >
       {/* ---------- Desktop: horizontal pill (md and up) ---------- */}
       <ul
@@ -192,7 +192,7 @@ export function Nav() {
               exit={{ opacity: 0, y: -8, scale: 0.96 }}
               transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
               className={cn(
-                "absolute top-full left-1/2 mt-3 flex min-w-[180px] -translate-x-1/2 flex-col gap-1 rounded-2xl p-2",
+                "absolute top-full left-0 mt-3 flex min-w-[180px] flex-col gap-1 rounded-2xl p-2",
                 scrolled ? "glass-strong-elevated" : "glass-strong",
               )}
             >

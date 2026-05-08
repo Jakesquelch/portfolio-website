@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     template: "%s | Jake Squelch",
   },
   description: SITE_DESCRIPTION,
-  metadataBase: new URL("https://jakesquelch.dev"),
+  metadataBase: new URL("https://jake-squelch.vercel.app"),
   keywords: [
     "Jake Squelch",
     "Software Engineer",

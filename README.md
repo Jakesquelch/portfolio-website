@@ -125,4 +125,4 @@ Defined in `app/globals.css`:
 ## Deploy
 
 `git push` to a branch tracked by Vercel; the site builds and deploys on push.
-Domain: <https://jakesquelch.dev>.
+Domain: <https://jake-squelch.vercel.app>.

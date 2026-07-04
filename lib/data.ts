@@ -36,8 +36,14 @@ export const about = {
  * at 12 = full circle). `durationLabel` is what shows in the middle of the
  * ring — keep it short ("6 mo", "1 yr") so it fits.
  *
+ * `logo` is the company wordmark shown as the card heading: drop the image
+ * in `public/` and record its natural width/height here so next/image knows
+ * the aspect ratio (the component scales it down by height).
+ *
  * Order matters: cards render left-to-right (or top-to-bottom on mobile) in
- * array order, so list them chronologically.
+ * array order with a gradient connector between each pair, so list them
+ * chronologically. Adding an entry here is all it takes — no component
+ * changes needed.
  */
 export type Experience = {
   company: string;
@@ -47,6 +53,7 @@ export type Experience = {
   period: string;
   location: string;
   context: string;
+  logo: { src: string; width: number; height: number };
 };
 
 export const experiences = [
@@ -59,6 +66,7 @@ export const experiences = [
     location: "Birmingham, UK",
     context:
       "Part-time at a Birmingham startup, between my first and second year of uni.",
+    logo: { src: "/civico.png", width: 502, height: 150 },
   },
   {
     company: "IBM",
@@ -69,6 +77,7 @@ export const experiences = [
     location: "Southampton, UK",
     context:
       "Year-long placement on the Ceph distributed-storage team.",
+    logo: { src: "/ibm.png", width: 1280, height: 478 },
   },
 ] as const satisfies readonly Experience[];
 

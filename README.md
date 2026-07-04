@@ -1,7 +1,6 @@
 # Portfolio Website
 
-Personal portfolio site for Jake Squelch — a single-page, dark-by-default,
-glass-on-starfield site built with Next.js 16.
+Personal portfolio website built with Next.js 16. With the aim to give a bit more of a background and some information on myself.
 
 ## Stack
 
@@ -60,7 +59,7 @@ layout updates.
 ## Local dev
 
 ```bash
-npm install
+npm i
 npm run dev
 ```
 

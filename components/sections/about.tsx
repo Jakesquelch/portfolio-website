@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, type ComponentType, type SVGProps } from "react";
+import { Fragment, useId, type ComponentType, type SVGProps } from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
 import {
@@ -174,10 +174,15 @@ export function About() {
               Where I&apos;ve worked
             </motion.h3>
 
+            {/* Cards come straight from `experiences` in lib/data.ts, with a
+                gradient connector between each consecutive pair. */}
             <div className="flex w-full flex-col items-stretch gap-3 md:flex-row md:items-center md:gap-2 lg:gap-4">
-              <ExperienceCard exp={experiences[0]} index={0} />
-              <Connector />
-              <ExperienceCard exp={experiences[1]} index={1} />
+              {experiences.map((exp, i) => (
+                <Fragment key={exp.company}>
+                  {i > 0 && <Connector />}
+                  <ExperienceCard exp={exp} index={i} />
+                </Fragment>
+              ))}
             </div>
           </div>
 
@@ -221,36 +226,22 @@ export function About() {
 }
 
 /**
- * Brand wordmark rendered next to the company name in each experience
- * card. Logos are dropped in /public and sized by height — the natural
- * width/height props give next/image the aspect ratio for layout-shift
- * avoidance, then `h-7 w-auto md:h-8` scales them to match the gradient
- * heading they sit beside.
+ * Brand wordmark rendered as each experience card's heading. Logos are
+ * dropped in /public and declared per-experience in `lib/data.ts` — the
+ * natural width/height there give next/image the aspect ratio for
+ * layout-shift avoidance, then `h-8 w-auto md:h-10` scales them by height
+ * so differently-proportioned wordmarks sit on a common baseline.
  */
-function CompanyLogo({ company }: { company: string }) {
-  if (company === "IBM") {
-    return (
-      <Image
-        src="/ibm.png"
-        alt="IBM logo"
-        width={1280}
-        height={478}
-        className="h-8 w-auto md:h-10"
-      />
-    );
-  }
-  if (company === "Civico") {
-    return (
-      <Image
-        src="/civico.png"
-        alt="Civico logo"
-        width={502}
-        height={150}
-        className="h-8 w-auto md:h-10"
-      />
-    );
-  }
-  return null;
+function CompanyLogo({ exp }: { exp: Experience }) {
+  return (
+    <Image
+      src={exp.logo.src}
+      alt={`${exp.company} logo`}
+      width={exp.logo.width}
+      height={exp.logo.height}
+      className="h-8 w-auto md:h-10"
+    />
+  );
 }
 
 /**
@@ -328,7 +319,7 @@ function ExperienceCard({ exp, index }: { exp: Experience; index: number }) {
 
       <div className="flex flex-col items-center gap-2">
         <h4 className="flex items-center justify-center">
-          <CompanyLogo company={exp.company} />
+          <CompanyLogo exp={exp} />
         </h4>
         <p className="text-sm font-medium text-foreground/85 md:text-base">
           {exp.role}

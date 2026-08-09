@@ -90,7 +90,14 @@ export const skills = {
     },
     {
       label: "Frameworks",
-      items: ["React", "Node.js", "Tailwind CSS", "Bootstrap"],
+      items: [
+        "React",
+        "Angular",
+        "Node.js",
+        "FastAPI",
+        "Tailwind CSS",
+        "Bootstrap",
+      ],
     },
     {
       label: "Tools",
@@ -133,6 +140,14 @@ export type Project = {
 };
 
 export const projects: readonly Project[] = [
+  {
+    title: "JakeOS",
+    description:
+      "An all-in-one productivity web app built to organise my own day — a to-do list with priorities and grouping, a journal, and a habit tracker, all in one place. The Angular 21 frontend is signals-first: each module's state persists itself through a single localStorage seam, so exactly one file changes when the FastAPI backend I'm wiring up takes over, and the services are covered by Vitest specs. Very much a live project — I'm still building on it, and it's the app I actually reach for day to day.",
+    image: null,
+    github: "https://github.com/Jakesquelch/JakeOS",
+    tags: ["Angular", "TypeScript", "FastAPI", "Python"],
+  },
   {
     title: "Weather App",
     description:

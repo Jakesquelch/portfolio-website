@@ -20,5 +20,7 @@ Todo:
 - Get playwright MCP to have a wonder through this and check for bugs/problems
 - Go through whole app from user POV and make it sound less AI
 - Need to see what it looks like on my phone/correct it so it looks good on phone
+- Add a date to the projects section stating when I worked on it last/or just when I did the project roughly?
+- Swap my experiences around, it should be going from oldest to newest - also we could add some more info here?
 
 

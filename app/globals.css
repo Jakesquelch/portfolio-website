@@ -23,8 +23,8 @@
  * accent keeps contrast; light is white ground with a deep violet.
  *
  * `--chip` is the one deliberate exception to theme mirroring: it stays a
- * light neutral in both themes because company logos and project
- * screenshots are authored against light backgrounds.
+ * light neutral in both themes because the project screenshots behind it
+ * are authored against light backgrounds.
  * ----------------------------------------------------------------------- */
 :root {
   --background: #ffffff;

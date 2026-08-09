@@ -116,7 +116,12 @@ export function Nav() {
           Jake Squelch
         </button>
 
-        <div className="flex items-center gap-4 sm:gap-6">
+        {/* On mobile the name button above is `hidden`, which removes it from
+            flex layout — `justify-between` would then strand this group at the
+            left edge. Taking the full width and centring restores a balanced
+            bar; from sm the group shrink-wraps and the parent pushes it right
+            again, opposite the name. */}
+        <div className="flex w-full items-center justify-center gap-4 sm:w-auto sm:gap-6">
           <ul className="flex items-center gap-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] sm:gap-6">
             {SECTIONS.map(({ id, label }) => (
               <li key={id}>

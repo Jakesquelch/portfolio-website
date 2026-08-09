@@ -25,15 +25,16 @@ export function ExperienceSection() {
 }
 
 /**
- * One experience row — company wordmark on a light chip, role + context in
- * the middle, period and location right-aligned in mono. The chip keeps a
- * light background in both themes (see `--chip` in globals.css) because the
- * logos are authored against light grounds.
+ * One experience row — company wordmark, role + context in the middle,
+ * period and location right-aligned in mono. Both logo PNGs have
+ * transparent grounds and mid-tone brand ink, so they sit directly on the
+ * page background and read in either theme without a chip behind them.
+ * The fixed box keeps the wordmarks optically aligned down the column.
  */
 function ExperienceRow({ exp }: { exp: Experience }) {
   return (
-    <div className="flex items-center gap-5 py-5">
-      <span className="flex h-14 w-24 shrink-0 items-center justify-center rounded-lg border border-line bg-chip">
+    <div className="flex items-center gap-4 py-5 sm:gap-5">
+      <span className="flex h-14 w-20 shrink-0 items-center justify-center sm:w-24">
         <Image
           src={exp.logo.src}
           alt={`${exp.company} logo`}
@@ -45,8 +46,15 @@ function ExperienceRow({ exp }: { exp: Experience }) {
       <div className="min-w-0 flex-1">
         <p className="font-semibold">{exp.role}</p>
         <p className="mt-0.5 text-sm text-muted-foreground">{exp.context}</p>
+        {/* On a phone the logo and the nowrap meta column together eat all
+            but ~80px of the row, shredding the role and context into a
+            narrow ribbon. Below sm the meta drops onto its own line here
+            and the column opposite is hidden. */}
+        <p className="mt-1.5 font-mono text-xs text-muted-foreground sm:hidden">
+          {exp.period} · {exp.location}
+        </p>
       </div>
-      <div className="shrink-0 text-right font-mono text-xs text-muted-foreground">
+      <div className="hidden shrink-0 text-right font-mono text-xs text-muted-foreground sm:block">
         <div className="whitespace-nowrap">{exp.period}</div>
         <div className="mt-0.5 whitespace-nowrap">{exp.location}</div>
       </div>

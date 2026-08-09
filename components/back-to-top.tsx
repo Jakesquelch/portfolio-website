@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
 import { ArrowUp } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 /**
- * Back-to-top button — fixed glass orb in the bottom-right that fades in once
- * the user has scrolled past ~60% of the viewport height (i.e. clearly out of
- * the hero) and smooth-scrolls to the top on click.
+ * Back-to-top button — bordered circle in the bottom-right that fades in
+ * once the user has scrolled past ~60% of the viewport height and
+ * smooth-scrolls to the top on click.
  *
- * Mounted once at the layout level so every page gets it for free, and it
- * sits above section content with a high z-index. The threshold uses
- * `window.innerHeight` so the trigger point scales with viewport size — same
- * relative position on a phone as on a desktop monitor.
+ * Always rendered so visibility is a cheap CSS opacity transition (no
+ * mount/unmount churn); `pointer-events-none` keeps the hidden button from
+ * intercepting clicks.
  */
 export function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -31,21 +30,23 @@ export function BackToTop() {
   };
 
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.button
-          type="button"
-          aria-label="Back to top"
-          onClick={scrollToTop}
-          initial={{ opacity: 0, y: 12, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 12, scale: 0.9 }}
-          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="glass-strong-elevated fixed right-5 bottom-5 z-40 flex h-12 w-12 items-center justify-center rounded-full text-foreground/80 transition-all hover:-translate-y-0.5 hover:text-foreground sm:right-7 sm:bottom-7"
-        >
-          <ArrowUp className="h-5 w-5" strokeWidth={2.25} />
-        </motion.button>
+    <button
+      type="button"
+      aria-label="Back to top"
+      aria-hidden={!visible}
+      tabIndex={visible ? 0 : -1}
+      onClick={scrollToTop}
+      className={cn(
+        // right offset mirrors the content column: max-w-3xl + px-6 below lg,
+        // max-w-4xl + px-6 from lg — so the button sits on the content's
+        // right edge instead of hugging the viewport on wide screens.
+        "fixed right-[max(1.25rem,calc((100vw-48rem)/2+1.5rem))] bottom-5 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-line bg-background text-muted-foreground shadow-sm transition-all duration-200 hover:text-foreground sm:bottom-7 lg:right-[max(1.25rem,calc((100vw-56rem)/2+1.5rem))]",
+        visible
+          ? "translate-y-0 opacity-100"
+          : "pointer-events-none translate-y-2 opacity-0",
       )}
-    </AnimatePresence>
+    >
+      <ArrowUp className="h-4.5 w-4.5" strokeWidth={2.25} />
+    </button>
   );
 }

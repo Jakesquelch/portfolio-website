@@ -2,30 +2,20 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
 import { Check, Mail } from "lucide-react";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 import { socials } from "@/lib/data";
 
 /**
- * Hero — first section. Circular profile picture on the left, greeting +
- * name + tagline + social row on the right. On mobile the picture stacks
- * above the text block.
+ * Hero — first section. Name, role and social row on the left, circular
+ * profile picture on the right. On mobile the picture stacks above the text
+ * (flex-col-reverse keeps the photo first visually while the text stays
+ * first in the DOM for screen readers).
  *
- * The picture is loaded from /profile-pic.webp. It's circularly cropped via
- * overflow-hidden, with object-fit: cover so it fills the circle.
+ * The picture is loaded from /profile-pic.webp with object-fit: cover.
  * `objectPosition: "center 22%"` biases the crop upward — the head sits
  * centred and the bottom of the circle lands roughly just below the
- * shoulders. Tune that percentage if your specific image needs more/less
- * head room.
- *
- * Behind the picture is a soft cyan→violet radial halo (cosmic glow), and
- * the picture itself has a thin white rim border + inset highlight to read
- * like a glass medallion against the starfield.
- *
- * Entrance: gentle fade-up stagger via Motion. Each piece (greeting, name,
- * tagline, accent line, social row) trails the one above it by ~150ms so
- * the eye reads top-to-bottom.
+ * shoulders. Tune that percentage if a new photo needs more/less head room.
  */
 export function Hero() {
   // "Email copied!" feedback — flips back to "Contact me" after ~2s. The copy
@@ -45,131 +35,51 @@ export function Hero() {
   };
 
   return (
-    <section
-      id="hero"
-      className="relative flex min-h-screen items-center justify-center px-6 py-24"
-    >
-      <div className="flex flex-col items-center gap-10 md:flex-row md:items-center md:gap-16 lg:gap-20 xl:gap-24">
-        {/* Profile picture */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.94 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="relative shrink-0"
-        >
-          {/* Cosmic halo behind the picture */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-full blur-3xl"
-            style={{
-              background:
-                "radial-gradient(circle, var(--halo-1) 0%, var(--halo-2) 45%, transparent 75%)",
-              transform: "scale(1.35)",
-            }}
-          />
-
-          {/* Circular frame: glass-rimmed, soft inset highlight, drop shadow */}
-          <div
-            className="relative h-36 w-36 overflow-hidden rounded-full border border-foreground/15 sm:h-44 sm:w-44 md:h-56 md:w-56 lg:h-72 lg:w-72 xl:h-80 xl:w-80"
-            style={{
-              boxShadow:
-                "inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 36px rgba(0,0,0,0.4)",
-            }}
-          >
-            <Image
-              src="/profile-pic.webp"
-              alt="Jake Squelch"
-              fill
-              priority
-              sizes="(min-width: 1280px) 320px, (min-width: 1024px) 288px, (min-width: 768px) 224px, (min-width: 640px) 176px, 144px"
-              style={{
-                objectFit: "cover",
-                objectPosition: "center 22%",
-              }}
-            />
-          </div>
-        </motion.div>
-
-        {/* Greeting + name + tagline + socials */}
-        <div className="flex flex-col items-center gap-3 md:items-start">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.7,
-              delay: 0.05,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="text-lg font-medium tracking-wide text-foreground/70 sm:text-xl md:text-2xl"
-          >
-            Hello, I&apos;m
-          </motion.p>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.85,
-              delay: 0.2,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="text-gradient text-center font-heading text-5xl font-semibold tracking-tight sm:text-6xl md:text-left md:text-7xl lg:text-8xl xl:text-9xl"
-          >
+    <section id="hero" className="px-6 pt-16 pb-8 md:pt-24 md:pb-12">
+      <div className="mx-auto flex max-w-3xl flex-col-reverse items-center gap-10 md:flex-row md:items-center md:justify-between md:gap-12 lg:max-w-4xl">
+        {/* Name + role + socials */}
+        <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
             Jake Squelch
-          </motion.h1>
+          </h1>
+          <p className="text-lg text-muted-foreground md:text-xl">
+            Software Engineer — final-year Computer Science student at Aston
+            University.
+          </p>
 
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.35,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="text-lg tracking-wide text-muted-foreground sm:text-xl md:text-2xl lg:text-3xl"
-          >
-            Software Engineer
-          </motion.p>
-
-          {/* Thin gradient accent line under the tagline */}
-          <motion.div
-            initial={{ opacity: 0, scaleX: 0 }}
-            animate={{ opacity: 1, scaleX: 1 }}
-            transition={{ duration: 0.7, delay: 0.5, ease: "easeOut" }}
-            className="mt-2 h-px w-32 origin-left bg-gradient-to-r from-cyan/70 via-violet/50 to-transparent lg:w-40"
-          />
-
-          {/* Social row: LinkedIn + GitHub icons + Contact me button */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.65,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="mt-5 flex items-center gap-3 sm:gap-3.5"
-          >
-            <SocialIconLink href={socials.linkedin} label="LinkedIn">
-              <LinkedInIcon className="h-5 w-5" />
-            </SocialIconLink>
+          <div className="mt-2 flex items-center gap-3">
             <SocialIconLink href={socials.github} label="GitHub">
-              <GitHubIcon className="h-5 w-5" />
+              <GitHubIcon className="h-4.5 w-4.5" />
+            </SocialIconLink>
+            <SocialIconLink href={socials.linkedin} label="LinkedIn">
+              <LinkedInIcon className="h-4.5 w-4.5" />
             </SocialIconLink>
             <a
               href={`mailto:${socials.email}`}
               onClick={handleContactClick}
               aria-live="polite"
-              className="glass-strong group ml-1 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-foreground transition-all hover:-translate-y-px hover:bg-foreground/10 sm:text-base"
+              className="ml-1 inline-flex h-10 items-center gap-2 rounded-full border border-accent px-5 text-sm font-medium text-accent transition-colors hover:bg-accent/10"
             >
               {copied ? (
-                <Check className="h-4 w-4 text-cyan" />
+                <Check className="h-4 w-4" />
               ) : (
-                <Mail className="h-4 w-4 transition-transform group-hover:-translate-y-px" />
+                <Mail className="h-4 w-4" />
               )}
               {copied ? "Email copied!" : "Contact me"}
             </a>
-          </motion.div>
+          </div>
+        </div>
+
+        {/* Profile picture — right side on desktop, top on mobile */}
+        <div className="relative h-44 w-44 shrink-0 overflow-hidden rounded-full border border-line md:h-56 md:w-56 lg:h-64 lg:w-64">
+          <Image
+            src="/profile-pic.webp"
+            alt="Jake Squelch"
+            fill
+            priority
+            sizes="(min-width: 1024px) 256px, (min-width: 768px) 224px, 176px"
+            style={{ objectFit: "cover", objectPosition: "center 22%" }}
+          />
         </div>
       </div>
     </section>
@@ -177,8 +87,8 @@ export function Hero() {
 }
 
 /**
- * Circular glass icon button. Wraps an external link with target=_blank and
- * rel=noreferrer. Hover lifts it a hair and brightens the rim.
+ * Circular bordered icon button. Wraps an external link with target=_blank
+ * and rel=noreferrer.
  */
 function SocialIconLink({
   href,
@@ -195,10 +105,9 @@ function SocialIconLink({
       target="_blank"
       rel="noreferrer"
       aria-label={label}
-      className="glass-strong inline-flex h-11 w-11 items-center justify-center rounded-full text-foreground/80 transition-all hover:-translate-y-px hover:bg-foreground/10 hover:text-foreground"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-foreground/80 transition-colors hover:border-foreground/30 hover:text-foreground"
     >
       {children}
     </a>
   );
 }
-

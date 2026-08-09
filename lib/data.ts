@@ -7,8 +7,9 @@
 // ---------- Socials -------------------------------------------------------
 
 /**
- * Canonical social/contact URLs. Shared by the Hero (icon row + Contact me
- * mailto) and the Footer (icon row). Edit here once and both update.
+ * Canonical social/contact URLs. Shared by the Nav (Contact mailto), the
+ * Hero (icon row + Contact button) and the Footer (icon row). Edit here
+ * once and all update.
  */
 export const socials = {
   linkedin: "https://www.linkedin.com/in/jake-squelch",
@@ -22,7 +23,7 @@ export const about = {
   heading: "About",
   paragraphs: [
     "Hello, I'm Jake! A final-year Computer Science student studying in Birmingham. I work across the stack — for now I'm doing everything from low-level backend to UI work.",
-    "I recently completed a year long placement with IBM working on Ceph Storage which I really enjoyed.",
+    "I recently completed a year-long placement with IBM on the Ceph distributed-storage team — writing C++ in a genuinely large codebase and getting my changes through real-world code review. Before that I worked part-time at Civico, a Birmingham startup, building backend C++.",
     "I'm currently looking for a graduate role and exploring which opportunities there are for me!",
   ],
 } as const;
@@ -30,26 +31,20 @@ export const about = {
 // ---------- Experience ----------------------------------------------------
 
 /**
- * Each experience renders as a glass card with a circular duration ring.
+ * Each experience renders as one row: company wordmark on a light chip,
+ * role + one-liner of context in the middle, period and location on the
+ * right in mono.
  *
- * `months` controls how far the gradient stroke wraps around the ring (capped
- * at 12 = full circle). `durationLabel` is what shows in the middle of the
- * ring — keep it short ("6 mo", "1 yr") so it fits.
+ * `logo` is the company wordmark: drop the image in `public/` and record
+ * its natural width/height here so next/image knows the aspect ratio (the
+ * component scales it down by height).
  *
- * `logo` is the company wordmark shown as the card heading: drop the image
- * in `public/` and record its natural width/height here so next/image knows
- * the aspect ratio (the component scales it down by height).
- *
- * Order matters: cards render left-to-right (or top-to-bottom on mobile) in
- * array order with a gradient connector between each pair, so list them
- * chronologically. Adding an entry here is all it takes — no component
- * changes needed.
+ * Rows render top-to-bottom in array order — list most recent first.
+ * Adding an entry here is all it takes, no component changes needed.
  */
 export type Experience = {
   company: string;
   role: string;
-  durationLabel: string;
-  months: number;
   period: string;
   location: string;
   context: string;
@@ -58,35 +53,30 @@ export type Experience = {
 
 export const experiences = [
   {
+    company: "IBM",
+    role: "Software Engineer · Ceph Team",
+    period: "2025 – 26",
+    location: "Southampton, UK",
+    context: "Year-long placement on the Ceph distributed-storage team.",
+    logo: { src: "/ibm.png", width: 1280, height: 478 },
+  },
+  {
     company: "Civico",
     role: "Backend C++ Engineer",
-    durationLabel: "4 mo",
-    months: 4,
     period: "2024",
     location: "Birmingham, UK",
     context:
       "Part-time at a Birmingham startup, between my first and second year of uni.",
     logo: { src: "/civico.png", width: 502, height: 150 },
   },
-  {
-    company: "IBM",
-    role: "Software Engineer · Ceph Team",
-    durationLabel: "1 yr",
-    months: 12,
-    period: "2025 – 2026",
-    location: "Southampton, UK",
-    context:
-      "Year-long placement on the Ceph distributed-storage team.",
-    logo: { src: "/ibm.png", width: 1280, height: 478 },
-  },
 ] as const satisfies readonly Experience[];
 
 // ---------- Skills --------------------------------------------------------
 
 /**
- * Skills are grouped (languages / frameworks / tools) and rendered as a
- * stack of chip rows under the experience timeline. Order within each group
- * is rendered as-is — list the things you most want highlighted first.
+ * Skills render as one line per group: a mono label on the left, the items
+ * joined with separators on the right. Order within each group is rendered
+ * as-is — list the things you most want highlighted first.
  *
  * To add a new group: append an entry to `skills.groups`. The component
  * iterates the array, so no markup change required.
@@ -95,15 +85,15 @@ export const skills = {
   heading: "Skills",
   groups: [
     {
-      label: "Programming Languages",
+      label: "Languages",
       items: ["Python", "Java", "C++", "JavaScript", "TypeScript", "PHP"],
     },
     {
-      label: "Frameworks & Libraries",
+      label: "Frameworks",
       items: ["React", "Node.js", "Tailwind CSS", "Bootstrap"],
     },
     {
-      label: "Technologies & Tools",
+      label: "Tools",
       items: ["Git", "Docker", "Kubernetes", "MySQL", "PyTest", "Unix"],
     },
   ],
@@ -112,28 +102,32 @@ export const skills = {
 // ---------- Projects ------------------------------------------------------
 
 /**
- * Each project renders as a glass card with a screenshot, blurb, and a link
- * to the repo.
+ * Each project renders as a wide horizontal card — image on the left
+ * (~38%), content on the right, stacking vertically on mobile.
  *
- * To add a real project: drop a screenshot in `public/` (any reasonable
- * aspect ratio — the card crops to 16:10), then add an object to the
- * `projects` array below. The grid grows to fill, no component changes
- * needed.
+ * To add a project: drop a screenshot in `public/` (any reasonable aspect
+ * ratio — the card crops to 16:10 on mobile), then add an object to the
+ * `projects` array below.
  *
- * Set `image` to null to render the styled "Coming soon" placeholder, and
+ * Set `image` to null to render the "Coming soon" placeholder, and
  * `github` to null to render a non-link "Repo coming soon" instead of the
  * GitHub link.
  *
  * `imageFit` defaults to "cover" — best for landscape browser screenshots
- * where minor cropping looks polished. Use "contain" for square / portrait
- * screenshots (e.g. desktop app windows) where cropping would hide the
- * subject; the image then sits on the cyan→violet gradient backdrop.
+ * where minor cropping looks polished. Use "contain" for screenshots that
+ * shouldn't be cropped; the image then sits padded on a backdrop.
+ *
+ * `imageBg` sets that backdrop for "contain" images (any CSS colour).
+ * Match it to the screenshot's own background so the letterboxing blends
+ * in seamlessly. Defaults to the light chip colour, which suits
+ * light-background screenshots.
  */
 export type Project = {
   title: string;
   description: string;
   image: string | null;
   imageFit?: "cover" | "contain";
+  imageBg?: string;
   github: string | null;
   tags?: readonly string[];
 };
@@ -151,9 +145,11 @@ export const projects: readonly Project[] = [
   {
     title: "This Website",
     description:
-      "Yes — the site you're on right now! A glassmorphic, space-themed single-pager built from scratch: server-rendered SVG starfield with zero JS shipped, dual oklch colour themes, scroll-triggered Motion animations, and data-driven sections so adding a project is a one-line edit. If you're curious how any of it works, the code is one click away.",
-    image: "/portfolio-project.webp",
+      "Yes — the site you're on right now! Built from scratch with Next.js 16 and designed to get out of the data's way: every section renders from typed data (adding a project is a one-line edit), most of the page ships zero JavaScript as server components, and a single violet accent does the wayfinding across the dark and light themes. If you're curious how any of it works, the code is one click away.",
+    image: "/portfolio-project.png",
+    imageFit: "contain",
+    imageBg: "#161618",
     github: "https://github.com/Jakesquelch/portfolio-website",
-    tags: ["Next.js", "TypeScript", "Tailwind CSS", "Motion"],
+    tags: ["Next.js", "TypeScript", "Tailwind CSS"],
   },
 ];

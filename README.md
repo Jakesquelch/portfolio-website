@@ -2,56 +2,80 @@
 
 Personal portfolio website built with Next.js 16. With the aim to give a bit more of a background and some information on myself.
 
+For a full tour of how the app is put together, see
+[`docs/architecture.md`](docs/architecture.md).
+
 ## Stack
 
 - **Next.js 16** (App Router) + **React 19** + **TypeScript**
-- **Tailwind CSS v4** with shadcn-style CSS variables
-- **Motion** (formerly Framer Motion) for entrance + scroll animations
-- **next-themes** (dark by default, with a top-right toggle to light)
-- **Geist Sans + Geist Mono + Space Grotesk** via `next/font`
+- **Tailwind CSS v4** with a small CSS-variable token set (7 tokens per theme)
+- **next-themes** (dark by default, top-right toggle to light)
+- **Geist Sans + Geist Mono** via `next/font`
 - Deployed on **Vercel**
+
+No animation library — the only motion is ~200ms CSS transitions on hovers,
+the theme cross-fade, and smooth scrolling.
+
+## Design — "Violet Thread"
+
+Quiet, data-first design: neutral ground, one violet accent, and a single
+recurring motif — monospace uppercase section labels (the `SectionLabel`
+component) with hairline rules. Dark and light palettes are mirrored
+token-for-token in `app/globals.css`:
+
+- **Dark (default)**: soft graphite `#161618` (not black), lighter violet
+  `#a78bfa` accent.
+- **Light**: white ground, near-black ink, deep violet `#6d28d9`.
+- `--chip` stays light in both themes — company logos and screenshots are
+  authored against light grounds.
+
+Mono (Geist Mono) is used for: section labels, nav links, dates/locations,
+skill group labels, and project tag chips. Everything else is Geist Sans.
 
 ## Sections
 
 The page is composed in `app/page.tsx` as a single column:
 
-1. **Hero** (`components/sections/hero.tsx`) — circular profile picture, name in
-   gradient text, tagline, social row + Contact button (which copies the email
-   to clipboard alongside the `mailto:` navigation).
-2. **About** (`components/sections/about.tsx`) — bio + photo, an embedded
-   experience timeline with circular duration rings, and a skills block (three
-   chip-row groups: languages / frameworks / tools).
-3. **Projects** (`components/sections/projects.tsx`) — vertical stack of wide
-   horizontal glass cards with a 3D mouse-tilt on hover.
+1. **Hero** (`components/sections/hero.tsx`) — name + role on the left,
+   circular profile picture on the right (stacks photo-first on mobile).
+   Social icon buttons + a Contact button that copies the email to
+   clipboard alongside the `mailto:` navigation (the site's contact
+   entry point, now that the nav has no Contact link).
+2. **About** (`components/sections/about.tsx`) — bio paragraphs and a
+   one-line-per-group skills block.
+3. **Experience** (`components/sections/experience.tsx`) — one row per
+   job: company wordmark on a light chip, role + context, period/location
+   in mono.
+4. **Projects** (`components/sections/projects.tsx`) — wide horizontal
+   cards: image left (~38%), content right, stacking on mobile.
 
-Plus three persistent UI elements rendered from `app/layout.tsx`:
+Persistent UI rendered from `app/layout.tsx`:
 
-- **Nav** (`components/nav.tsx`) — fixed glass pill, IntersectionObserver-driven
-  active-section highlight, layout-animated indicator. Switches to a heavier
-  glass variant once you scroll past the hero. Mobile collapses to a glass
-  hamburger dropdown.
-- **Starfield** (`components/starfield-svg.tsx`) — 300 SVG circles at fixed
-  percentage coordinates, generated once at module load via a seeded PRNG.
-  Server component, zero JS shipped. Hidden in light mode.
-- **ThemeToggle** (`components/theme-toggle.tsx`) — fixed glass orb in the
-  top-right that swaps between the Cosmic (dark) and Daybreak (light)
-  palettes. Sun ↔ moon icon cross-fade.
-- **BackToTop** (`components/back-to-top.tsx`) — glass orb that fades in once
-  the user scrolls past ~60% of the viewport height.
-- **Footer** (`components/footer.tsx`) — divider, socials, copyright.
+- **Nav** (`components/nav.tsx`) — sticky top bar: name (left, scrolls to
+  top; fades in only after scrolling past the hero so the page doesn't
+  read "Jake Squelch" twice at once), mono section links (About /
+  Experience / Projects) + theme toggle (right). IntersectionObserver
+  drives the active-link highlight. No hamburger — the links fit on
+  mobile as-is (the name hides below `sm`).
+- **ThemeToggle** (`components/theme-toggle.tsx`) — bordered circle in the
+  nav, sun ↔ moon.
+- **BackToTop** (`components/back-to-top.tsx`) — bordered circle that fades
+  in past ~60% of the viewport height, aligned to the content column's
+  right edge rather than the viewport's.
+- **Footer** (`components/footer.tsx`) — hairline rule, socials, copyright.
 
 ## Editing content
 
 All copy + data lives in [`lib/data.ts`](lib/data.ts):
 
-- `socials` — LinkedIn / GitHub / email, shared by Hero and Footer.
+- `socials` — LinkedIn / GitHub / email, shared by Nav, Hero and Footer.
 - `about.heading` + `about.paragraphs` — bio.
-- `experiences[]` — each renders as a card with a duration ring.
-  `months / 12` controls how far the gradient stroke wraps.
-- `skills.groups[]` — each group is a labelled row of chips (e.g.
-  "Programming Languages"). Append a group object to add a new row.
+- `experiences[]` — one row each; `logo` needs the image's natural
+  width/height so `next/image` knows the aspect ratio.
+- `skills.groups[]` — each group renders as one labelled line.
 - `projects[]` — each renders as a horizontal card. Set `image` or `github`
-  to `null` to render the placeholder / "coming soon" fallbacks.
+  to `null` for the placeholder / "coming soon" fallbacks; `imageFit:
+  "contain"` suits portrait/square screenshots.
 
 Section components don't bake copy into JSX — edit `lib/data.ts` and the
 layout updates.
@@ -74,52 +98,37 @@ npm run lint        # eslint
 
 ```
 app/
-  layout.tsx              # fonts, ThemeProvider, persistent UI, metadata
+  layout.tsx              # fonts, ThemeProvider, Nav/Footer/BackToTop, metadata
   page.tsx                # composes Hero / About / Projects
-  globals.css             # Tailwind v4 + tokens + .glass utilities
-  icon.svg                # favicon (gradient sparkle on cosmic indigo)
+  globals.css             # Tailwind v4 + the two token palettes
+  icon.svg                # favicon
   opengraph-image.tsx     # dynamic 1200×630 OG card via next/og
 components/
-  sections/               # Hero / About / Projects
-  nav.tsx                 # sticky glass nav + mobile dropdown
-  starfield-svg.tsx       # static SVG starfield background
-  back-to-top.tsx         # fixed glass scroll-to-top button
-  footer.tsx              # divider + socials + copyright
-  icons.tsx               # inline LinkedIn + GitHub SVGs (lucide dropped brands)
+  sections/               # Hero / About / Experience / Projects
+  nav.tsx                 # sticky top nav + active-section highlight
+  section-label.tsx       # the mono section-heading motif
+  theme-toggle.tsx        # sun/moon toggle (lives in the nav)
+  back-to-top.tsx         # fixed scroll-to-top button
+  footer.tsx              # rule + socials + copyright
+  icons.tsx               # inline GitHub + LinkedIn SVGs (simple-icons paths)
   theme-provider.tsx      # next-themes wrapper
 lib/
   data.ts                 # all site copy as typed data
   utils.ts                # cn() helper
 public/
-  profile-pic.webp        # used in Hero
-  about-pic.webp          # used in About
+  profile-pic.webp        # hero photo
+  ibm.png, civico.png     # experience wordmarks
+  *-project.*             # project screenshots
 ```
-
-## Design system
-
-Defined in `app/globals.css`:
-
-- Two oklch palettes, **Cosmic** (dark / default) and **Daybreak** (light) —
-  same cyan/violet accent identity, opposite surface treatments. Glass,
-  halos and body backdrop reference theme-scoped CSS variables so utilities
-  flip automatically when the theme toggles.
-- `.glass`, `.glass-strong`, `.glass-strong-elevated` — three escalating
-  frosted-glass utilities (translucent fill + backdrop-blur + inset highlight
-  + drop shadow). The "elevated" variant is what the nav switches to once you
-  scroll off the hero.
-- `.text-gradient` — cyan → violet linear gradient clipped to text.
-- A `prefers-reduced-motion: reduce` block disables all animation and smooth
-  scrolling site-wide.
 
 ## Performance notes
 
-- Starfield is a server-rendered SVG — no JS, no canvas, no WebGL.
-- Animations only touch `transform` / `opacity`. No `top` / `left` / `width`.
-- Project tilt mutates `style.transform` directly in a mousemove handler
-  (no React re-renders, runs on the compositor).
+- About, Projects and Footer are **server components** — zero JS shipped.
+- Client JS is limited to the nav (observer + smooth scroll), theme toggle,
+  hero contact button, and back-to-top.
 - Scroll listeners are `{ passive: true }`.
-- `next/image` with explicit `sizes` for the profile and about photos.
-- `priority` on the hero photo only.
+- `next/image` with explicit `sizes`; `priority` on the hero photo only.
+- `prefers-reduced-motion` collapses all transitions and smooth scrolling.
 
 ## Deploy
 

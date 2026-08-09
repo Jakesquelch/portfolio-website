@@ -1,37 +1,64 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const SECTIONS = [
-  { id: "hero", label: "Home" },
   { id: "about", label: "About" },
+  { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
 ] as const;
 
+/**
+ * Sticky top nav — name on the left (scrolls to top), mono section links +
+ * Contact mailto + theme toggle on the right. The links are short enough
+ * that the same row works on mobile, so there's no hamburger.
+ */
 export function Nav() {
-  const [active, setActive] = useState<string>("hero");
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const navRef = useRef<HTMLElement>(null);
+  const [active, setActive] = useState<string | null>(null);
+  const [showName, setShowName] = useState(false);
+
+  /**
+   * The nav name only fades in once the hero (which opens with the same
+   * name at display size) is scrolled out of view — otherwise the page
+   * reads "Jake Squelch" twice in the same glance.
+   */
+  useEffect(() => {
+    const onScroll = () => {
+      setShowName(window.scrollY > window.innerHeight * 0.4);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   /**
    * IntersectionObserver tracks which section is currently in the viewport.
    * The rootMargin "-40% 0px -40% 0px" means a section only counts as active
    * when it's near the middle of the viewport — feels more natural than
-   * triggering at the edges.
+   * triggering at the edges. On the hero neither link is active.
+   *
+   * Short sections mean two can occupy that middle band at once (e.g.
+   * jumping to Experience also puts the top of Projects in the band), so
+   * we keep a set of everything currently intersecting and highlight the
+   * topmost in document order — not whichever entry happened to fire last.
    */
   useEffect(() => {
+    const inView = new Set<string>();
+
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            setActive(entry.target.id);
+            inView.add(entry.target.id);
+          } else {
+            inView.delete(entry.target.id);
           }
         }
+        const topmost = SECTIONS.find(({ id }) => inView.has(id));
+        setActive(topmost ? topmost.id : null);
       },
       { rootMargin: "-40% 0px -40% 0px", threshold: 0 },
     );
@@ -42,19 +69,6 @@ export function Nav() {
     }
 
     return () => observer.disconnect();
-  }, []);
-
-  /**
-   * Scroll listener: once the user has scrolled past the first ~80px the nav
-   * switches to its elevated glass variant — more opaque background, stronger
-   * rim, deeper shadow — so the pill stays legible against busy section
-   * content. Stays light on the hero where there's nothing competing.
-   */
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   /**
@@ -81,147 +95,49 @@ export function Nav() {
     history.replaceState(null, "", `#${id}`);
   };
 
-  // Close mobile menu when clicking outside or hitting Escape.
-  useEffect(() => {
-    if (!mobileOpen) return;
-
-    const onPointerDown = (e: MouseEvent | TouchEvent) => {
-      if (navRef.current && !navRef.current.contains(e.target as Node)) {
-        setMobileOpen(false);
-      }
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMobileOpen(false);
-    };
-
-    document.addEventListener("mousedown", onPointerDown);
-    document.addEventListener("touchstart", onPointerDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onPointerDown);
-      document.removeEventListener("touchstart", onPointerDown);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [mobileOpen]);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    history.replaceState(null, "", window.location.pathname);
+  };
 
   return (
-    <nav
-      ref={navRef}
-      className="fixed top-4 left-5 z-50 sm:left-7 md:left-1/2 md:-translate-x-1/2"
-    >
-      {/* ---------- Desktop: horizontal pill (md and up) ---------- */}
-      <ul
-        className={cn(
-          "hidden items-center gap-1 rounded-full px-2 py-2 transition-all duration-300 md:flex",
-          scrolled ? "glass-strong-elevated" : "glass-strong",
-        )}
-      >
-        {SECTIONS.map(({ id, label }) => {
-          const isActive = active === id;
-          return (
-            <li key={id} className="relative">
-              <Link
-                href={`#${id}`}
-                onClick={(e) => handleNavClick(e, id)}
-                className={cn(
-                  "relative block rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
-                  isActive
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                {isActive && (
-                  <motion.span
-                    layoutId="nav-pill"
-                    className="absolute inset-0 -z-10 rounded-full bg-foreground/10"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
-                  />
-                )}
-                {label}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-
-      {/* ---------- Mobile: hamburger + glass dropdown (below md) ---------- */}
-      <div className="relative md:hidden">
+    <header className="sticky top-0 z-50 border-b border-line bg-background">
+      <nav className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4 sm:px-6 lg:max-w-4xl">
         <button
           type="button"
-          onClick={() => setMobileOpen((o) => !o)}
-          aria-expanded={mobileOpen}
-          aria-controls="mobile-nav-menu"
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          onClick={scrollToTop}
+          aria-hidden={!showName}
+          tabIndex={showName ? 0 : -1}
           className={cn(
-            "flex h-11 w-11 items-center justify-center rounded-full text-foreground transition-all duration-300",
-            scrolled ? "glass-strong-elevated" : "glass-strong",
+            "hidden text-sm font-semibold tracking-tight text-foreground transition-opacity duration-200 sm:block",
+            showName ? "opacity-100" : "pointer-events-none opacity-0",
           )}
         >
-          {/* Cross-fade between Menu and X icons. */}
-          <AnimatePresence mode="wait" initial={false}>
-            {mobileOpen ? (
-              <motion.span
-                key="x"
-                initial={{ opacity: 0, rotate: -45 }}
-                animate={{ opacity: 1, rotate: 0 }}
-                exit={{ opacity: 0, rotate: 45 }}
-                transition={{ duration: 0.15 }}
-              >
-                <X size={20} />
-              </motion.span>
-            ) : (
-              <motion.span
-                key="menu"
-                initial={{ opacity: 0, rotate: 45 }}
-                animate={{ opacity: 1, rotate: 0 }}
-                exit={{ opacity: 0, rotate: -45 }}
-                transition={{ duration: 0.15 }}
-              >
-                <Menu size={20} />
-              </motion.span>
-            )}
-          </AnimatePresence>
+          Jake Squelch
         </button>
 
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.ul
-              id="mobile-nav-menu"
-              initial={{ opacity: 0, y: -8, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.96 }}
-              transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-              className={cn(
-                "absolute top-full left-0 mt-3 flex min-w-[180px] flex-col gap-1 rounded-2xl p-2",
-                scrolled ? "glass-strong-elevated" : "glass-strong",
-              )}
-            >
-              {SECTIONS.map(({ id, label }) => {
-                const isActive = active === id;
-                return (
-                  <li key={id}>
-                    <Link
-                      href={`#${id}`}
-                      onClick={(e) => {
-                        handleNavClick(e, id);
-                        setMobileOpen(false);
-                      }}
-                      className={cn(
-                        "block rounded-xl px-4 py-2.5 text-sm font-medium transition-colors",
-                        isActive
-                          ? "bg-foreground/10 text-foreground"
-                          : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground",
-                      )}
-                    >
-                      {label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </motion.ul>
-          )}
-        </AnimatePresence>
-      </div>
-    </nav>
+        <div className="flex items-center gap-4 sm:gap-6">
+          <ul className="flex items-center gap-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] sm:gap-6">
+            {SECTIONS.map(({ id, label }) => (
+              <li key={id}>
+                <Link
+                  href={`#${id}`}
+                  onClick={(e) => handleNavClick(e, id)}
+                  className={cn(
+                    "transition-colors",
+                    active === id
+                      ? "font-semibold text-accent"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ThemeToggle />
+        </div>
+      </nav>
+    </header>
   );
 }

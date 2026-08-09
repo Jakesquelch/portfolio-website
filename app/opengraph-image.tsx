@@ -13,7 +13,7 @@ import { ImageResponse } from "next/og";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Jake Squelch — Software Engineer";
+export const alt = "Jake Squelch";
 
 export default async function OpenGraphImage() {
   return new ImageResponse(

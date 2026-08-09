@@ -148,4 +148,12 @@ export const projects: readonly Project[] = [
     github: "https://github.com/Jakesquelch/WeatherApp",
     tags: ["Java", "Swing", "REST API", "JSON"],
   },
+  {
+    title: "This Website",
+    description:
+      "Yes — the site you're on right now! A glassmorphic, space-themed single-pager built from scratch: server-rendered SVG starfield with zero JS shipped, dual oklch colour themes, scroll-triggered Motion animations, and data-driven sections so adding a project is a one-line edit. If you're curious how any of it works, the code is one click away.",
+    image: "/portfolio-project.webp",
+    github: "https://github.com/Jakesquelch/portfolio-website",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "Motion"],
+  },
 ];

@@ -24,7 +24,7 @@ const spaceGrotesk = Space_Grotesk({
   weight: ["400", "500", "600", "700"],
 });
 
-const SITE_TITLE = "Jake Squelch — Software Engineer";
+const SITE_TITLE = "Jake Squelch";
 const SITE_DESCRIPTION =
   "Personal portfolio of Jake Squelch — final-year Computer Science student at Aston University, with placement experience at IBM (Ceph) and Civico.";
 

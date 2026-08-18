@@ -43,7 +43,7 @@ export function Hero() {
             Jake Squelch
           </h1>
           <p className="text-lg text-muted-foreground md:text-xl">
-            Software Engineer — final-year Computer Science student at Aston
+            Software Engineer & final-year Computer Science student at Aston
             University.
           </p>
 

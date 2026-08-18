@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 const SITE_TITLE = "Jake Squelch";
 const SITE_DESCRIPTION =
-  "Personal portfolio of Jake Squelch — final-year Computer Science student at Aston University, with placement experience at IBM (Ceph) and Civico.";
+  "Personal portfolio of Jake Squelch - Final-year Computer Science student at Aston University, with placement experience at IBM.";
 
 /**
  * Page metadata. `metadataBase` lets relative og:image paths resolve to an

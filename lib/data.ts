@@ -22,8 +22,8 @@ export const socials = {
 export const about = {
   heading: "About",
   paragraphs: [
-    "Hello, I'm Jake! A final-year Computer Science student studying in Birmingham. I work across the stack — for now I'm doing everything from low-level backend to UI work.",
-    "I recently completed a year-long placement with IBM on the Ceph distributed-storage team — writing C++ in a genuinely large codebase and getting my changes through real-world code review. Before that I worked part-time at Civico, a Birmingham startup, building backend C++.",
+    "Hello, I'm Jake! A final-year Computer Science student studying in Birmingham. I work across the stack, for now I'm doing everything from low-level backend to UI work.",
+    "I recently completed a year-long placement with IBM on the Ceph distributed-storage team, writing C++ in a genuinely large codebase and getting my changes through real-world code review. Before that I worked part-time at Civico, a Birmingham startup, building backend C++.",
     "I'm currently looking for a graduate role and exploring which opportunities there are for me!",
   ],
 } as const;
@@ -128,6 +128,19 @@ export const skills = {
  * Match it to the screenshot's own background so the letterboxing blends
  * in seamlessly. Defaults to the light chip colour, which suits
  * light-background screenshots.
+ *
+ * `imagePosition` is any CSS object-position — it decides which part of a
+ * "cover" screenshot survives the crop (e.g. "top" keeps the header and
+ * crops the footer; "50% 25%" nudges it finer, where 0% is the top edge
+ * and 100% the bottom). Defaults to centred. It also shifts a "contain"
+ * image within its letterboxing, though centred is usually right there.
+ *
+ * `imageScale` zooms relative to whatever `imageFit` already does — 1 is
+ * that default framing, 0.8 pulls back to show ~25% more of the shot, 1.2
+ * pushes in. Zooming out past the panel edges reveals `imageBg`, so set
+ * that to the screenshot's own background when going below 1. Zooming
+ * anchors on `imagePosition`, so "top" holds the top edge steady and opens
+ * the gap at the bottom.
  */
 export type Project = {
   title: string;
@@ -135,36 +148,40 @@ export type Project = {
   image: string | null;
   imageFit?: "cover" | "contain";
   imageBg?: string;
+  imagePosition?: string;
+  imageScale?: number;
   github: string | null;
   tags?: readonly string[];
 };
 
 export const projects: readonly Project[] = [
   {
-    title: "JakeOS",
+    title: "Pulse",
     description:
-      "An all-in-one productivity web app built to organise my own day — a to-do list with priorities and grouping, a journal, and a habit tracker, all in one place. The Angular 21 frontend is signals-first: each module's state persists itself through a single localStorage seam, so exactly one file changes when the FastAPI backend I'm wiring up takes over, and the services are covered by Vitest specs. Very much a live project — I'm still building on it, and it's the app I actually reach for day to day.",
-    image: null,
-    github: "https://github.com/Jakesquelch/JakeOS",
-    tags: ["Angular", "TypeScript", "FastAPI", "Python"],
-  },
-  {
-    title: "Weather App",
-    description:
-      "Java desktop app that pulls real-time weather data from the Open-Meteo API and surfaces it through a Swing GUI — temperature, wind, and condition icons refreshing every ~2s. Custom HTTP layer (HttpURLConnection) with retry-on-failure to keep flaky network calls from breaking the UI; JSON Simple for parsing the API responses.",
-    image: "/weather-project.png",
+      "An all-in-one productivity web app built to organise my own day. Includes a to-do list with priorities and grouping, a journal, and a habit tracker, all in one place. Angular 21 frontend, FastAPI backend, and the services are covered by Vitest specs.",
+    image: "/pulse-app.png",
+    imageBg: "#2a2218",
     imageFit: "contain",
-    github: "https://github.com/Jakesquelch/WeatherApp",
-    tags: ["Java", "Swing", "REST API", "JSON"],
+    github: "https://github.com/Jakesquelch/Pulse",
+    tags: ["Angular", "TypeScript", "FastAPI", "Python"],
   },
   {
     title: "This Website",
     description:
-      "Yes — the site you're on right now! Built from scratch with Next.js 16 and designed to get out of the data's way: every section renders from typed data (adding a project is a one-line edit), most of the page ships zero JavaScript as server components, and a single violet accent does the wayfinding across the dark and light themes. If you're curious how any of it works, the code is one click away.",
+      "The site you're on right now! Built from scratch with Next.js 16 and designed to easily update: every section renders from typed data, most of the page ships zero JavaScript as server components, includes dark and light theme.",
     image: "/portfolio-project.png",
     imageFit: "contain",
     imageBg: "#161618",
     github: "https://github.com/Jakesquelch/portfolio-website",
     tags: ["Next.js", "TypeScript", "Tailwind CSS"],
+  },
+  {
+    title: "Weather App",
+    description:
+      "Java desktop app that pulls real-time weather data from the Open-Meteo API and surfaces it through a Swing GUI. Temperature, wind, and condition icons refreshing every ~2s. Custom HTTP layer (HttpURLConnection) with retry-on-failure to keep flaky network calls from breaking the UI; JSON Simple for parsing the API responses.",
+    image: "/weather-project.png",
+    imageFit: "contain",
+    github: "https://github.com/Jakesquelch/WeatherApp",
+    tags: ["Java", "Swing", "REST API", "JSON"],
   },
 ];

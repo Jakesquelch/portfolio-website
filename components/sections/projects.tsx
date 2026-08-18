@@ -39,9 +39,11 @@ function ProjectCard({ project }: { project: Project }) {
     <article className="flex flex-col overflow-hidden rounded-xl border border-line bg-surface md:min-h-[220px] md:flex-row">
       {/* Image / placeholder — full width on mobile, ~38% on md+. The
           backdrop defaults to the light chip; projects can override it via
-          `imageBg` so "contain" letterboxing matches their screenshot. */}
+          `imageBg` so "contain" letterboxing matches their screenshot.
+          `overflow-hidden` keeps an `imageScale` above 1 clipped to the
+          panel instead of spilling over the body text. */}
       <div
-        className="relative aspect-[16/10] w-full border-b border-line bg-chip md:aspect-auto md:w-[38%] md:flex-none md:border-r md:border-b-0"
+        className="relative aspect-[16/10] w-full overflow-hidden border-b border-line bg-chip md:aspect-auto md:w-[38%] md:flex-none md:border-r md:border-b-0"
         style={project.imageBg ? { backgroundColor: project.imageBg } : undefined}
       >
         {project.image ? (
@@ -55,6 +57,16 @@ function ProjectCard({ project }: { project: Project }) {
                 ? "object-contain p-3"
                 : "object-cover",
             )}
+            style={{
+              objectPosition: project.imagePosition,
+              // Zoom anchors wherever the image is positioned, so "top"
+              // scales about the top edge rather than drifting off-panel.
+              transform:
+                project.imageScale !== undefined
+                  ? `scale(${project.imageScale})`
+                  : undefined,
+              transformOrigin: project.imagePosition,
+            }}
           />
         ) : (
           <PlaceholderImage />

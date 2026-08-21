@@ -2,7 +2,6 @@ import Image from "next/image";
 import { ArrowUpRight, FolderGit2 } from "lucide-react";
 import { projects, type Project } from "@/lib/data";
 import { SectionLabel } from "@/components/section-label";
-import { cn } from "@/lib/utils";
 
 /**
  * Projects section — vertical stack of wide horizontal cards driven by
@@ -30,18 +29,16 @@ export function Projects() {
 
 /**
  * Single horizontal project card — hairline border, soft surface fill, no
- * shadow. The image sits on the light chip background (see `--chip`) so
- * `imageFit: "contain"` screenshots read as deliberately framed rather
- * than sized-wrong.
+ * shadow. Screenshots are letterboxed rather than cropped, sitting on a
+ * backdrop (`imageBg`, defaulting to the light `--chip`) so they read as
+ * deliberately framed rather than sized-wrong.
  */
 function ProjectCard({ project }: { project: Project }) {
   return (
     <article className="flex flex-col overflow-hidden rounded-xl border border-line bg-surface md:min-h-[220px] md:flex-row">
       {/* Image / placeholder — full width on mobile, ~38% on md+. The
           backdrop defaults to the light chip; projects can override it via
-          `imageBg` so "contain" letterboxing matches their screenshot.
-          `overflow-hidden` keeps an `imageScale` above 1 clipped to the
-          panel instead of spilling over the body text. */}
+          `imageBg` so the letterboxing matches their screenshot. */}
       <div
         className="relative aspect-[16/10] w-full overflow-hidden border-b border-line bg-chip md:aspect-auto md:w-[38%] md:flex-none md:border-r md:border-b-0"
         style={project.imageBg ? { backgroundColor: project.imageBg } : undefined}
@@ -52,21 +49,7 @@ function ProjectCard({ project }: { project: Project }) {
             alt={project.title}
             fill
             sizes="(min-width: 768px) 38vw, 100vw"
-            className={cn(
-              project.imageFit === "contain"
-                ? "object-contain p-3"
-                : "object-cover",
-            )}
-            style={{
-              objectPosition: project.imagePosition,
-              // Zoom anchors wherever the image is positioned, so "top"
-              // scales about the top edge rather than drifting off-panel.
-              transform:
-                project.imageScale !== undefined
-                  ? `scale(${project.imageScale})`
-                  : undefined,
-              transformOrigin: project.imagePosition,
-            }}
+            className="object-contain p-3"
           />
         ) : (
           <PlaceholderImage />

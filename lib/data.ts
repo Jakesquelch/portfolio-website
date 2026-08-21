@@ -119,36 +119,17 @@ export const skillGroups = [
  * `github` to null to render a non-link "Repo coming soon" instead of the
  * GitHub link.
  *
- * `imageFit` defaults to "cover" — best for landscape browser screenshots
- * where minor cropping looks polished. Use "contain" for screenshots that
- * shouldn't be cropped; the image then sits padded on a backdrop.
- *
- * `imageBg` sets that backdrop for "contain" images (any CSS colour).
- * Match it to the screenshot's own background so the letterboxing blends
- * in seamlessly. Defaults to the light chip colour, which suits
+ * Screenshots are letterboxed to fit (`object-contain`) rather than
+ * cropped, so nothing gets cut off. `imageBg` is the colour behind that
+ * letterboxing — match it to the screenshot's own background and the
+ * padding blends in. It defaults to the light `--chip` colour, which suits
  * light-background screenshots.
- *
- * `imagePosition` is any CSS object-position — it decides which part of a
- * "cover" screenshot survives the crop (e.g. "top" keeps the header and
- * crops the footer; "50% 25%" nudges it finer, where 0% is the top edge
- * and 100% the bottom). Defaults to centred. It also shifts a "contain"
- * image within its letterboxing, though centred is usually right there.
- *
- * `imageScale` zooms relative to whatever `imageFit` already does — 1 is
- * that default framing, 0.8 pulls back to show ~25% more of the shot, 1.2
- * pushes in. Zooming out past the panel edges reveals `imageBg`, so set
- * that to the screenshot's own background when going below 1. Zooming
- * anchors on `imagePosition`, so "top" holds the top edge steady and opens
- * the gap at the bottom.
  */
 export type Project = {
   title: string;
   description: string;
   image: string | null;
-  imageFit?: "cover" | "contain";
   imageBg?: string;
-  imagePosition?: string;
-  imageScale?: number;
   github: string | null;
   tags?: readonly string[];
 };
@@ -160,7 +141,6 @@ export const projects: readonly Project[] = [
       "An all-in-one productivity web app built to organise my own day. Includes a to-do list with priorities and grouping, a journal, and a habit tracker, all in one place. Angular 21 frontend, FastAPI backend, and the services are covered by Vitest specs.",
     image: "/pulse-app.png",
     imageBg: "#2a2218",
-    imageFit: "contain",
     github: "https://github.com/Jakesquelch/Pulse",
     tags: ["Angular", "TypeScript", "FastAPI", "Python"],
   },
@@ -169,7 +149,6 @@ export const projects: readonly Project[] = [
     description:
       "The site you're on right now! Built from scratch with Next.js 16 and designed to easily update: every section renders from typed data, most of the page ships zero JavaScript as server components, includes dark and light theme.",
     image: "/portfolio-project.png",
-    imageFit: "contain",
     imageBg: "#161618",
     github: "https://github.com/Jakesquelch/portfolio-website",
     tags: ["Next.js", "TypeScript", "Tailwind CSS"],
@@ -179,7 +158,6 @@ export const projects: readonly Project[] = [
     description:
       "Java desktop app that pulls real-time weather data from the Open-Meteo API and surfaces it through a Swing GUI. Temperature, wind, and condition icons refreshing every ~2s. Custom HTTP layer (HttpURLConnection) with retry-on-failure to keep flaky network calls from breaking the UI; JSON Simple for parsing the API responses.",
     image: "/weather-project.png",
-    imageFit: "contain",
     github: "https://github.com/Jakesquelch/WeatherApp",
     tags: ["Java", "Swing", "REST API", "JSON"],
   },

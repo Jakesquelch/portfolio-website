@@ -46,7 +46,6 @@ components/
   back-to-top.tsx        # client — scroll state
   footer.tsx             # server
   icons.tsx              # inline brand SVGs (GitHub, LinkedIn)
-  theme-provider.tsx     # thin client wrapper around next-themes
 lib/
   data.ts                # ALL site content, as typed exported constants
   utils.ts               # cn() = clsx + tailwind-merge
@@ -97,7 +96,9 @@ native smooth scrolling — all disabled by the global
 
 Three cooperating layers:
 
-1. **`next-themes`** (`theme-provider.tsx` → `layout.tsx`): dark is the
+1. **`next-themes`** (`ThemeProvider` imported straight into
+   `layout.tsx` — the package ships its own `"use client"` directive, so
+   no local wrapper component is needed): dark is the
    default for everyone (`defaultTheme="dark"`, `enableSystem={false}`);
    the nav toggle switches to light and persists the choice in
    `localStorage`. The library toggles a `.dark` class on `<html>` before
@@ -139,9 +140,9 @@ All images go through `next/image`:
   upward.
 - Company logos: natural width/height recorded in `lib/data.ts` so the
   aspect ratio is known at build time; scaled by height in CSS.
-- Project screenshots: `fill` with `object-cover` (landscape browser
-  shots) or `object-contain` (portrait/square app windows), chosen per
-  project via `imageFit` in the data.
+- Project screenshots: `fill` with `object-contain`, so shots are
+  letterboxed rather than cropped. The backdrop behind the letterboxing is
+  `imageBg` per project, falling back to the light `--chip` token.
 
 ## SEO / sharing
 

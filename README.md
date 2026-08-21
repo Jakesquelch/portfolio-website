@@ -74,8 +74,8 @@ All copy + data lives in [`lib/data.ts`](lib/data.ts):
   width/height so `next/image` knows the aspect ratio.
 - `skillGroups[]` — each group renders as one labelled line.
 - `projects[]` — each renders as a horizontal card. Set `image` or `github`
-  to `null` for the placeholder / "coming soon" fallbacks; `imageFit:
-  "contain"` suits portrait/square screenshots.
+  to `null` for the placeholder / "coming soon" fallbacks; set `imageBg` to
+  the screenshot's own background colour so its letterboxing blends in.
 
 Section components don't bake copy into JSX — edit `lib/data.ts` and the
 layout updates.
@@ -111,7 +111,6 @@ components/
   back-to-top.tsx         # fixed scroll-to-top button
   footer.tsx              # rule + socials + copyright
   icons.tsx               # inline GitHub + LinkedIn SVGs (simple-icons paths)
-  theme-provider.tsx      # next-themes wrapper
 lib/
   data.ts                 # all site copy as typed data
   utils.ts                # cn() helper

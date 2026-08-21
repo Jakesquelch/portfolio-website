@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* Repoints Tailwind's built-in `dark:` variant at the `.dark` class that
+ * next-themes puts on <html>. Without this it defaults to
+ * `@media (prefers-color-scheme: dark)`.
+ *
+ * Nothing uses a `dark:` utility today — theming works purely by redefining
+ * the CSS variables under `.dark` below, and components just read the tokens.
+ * This stays as a guard: the site ignores OS preference entirely
+ * (`enableSystem={false}`, dark by default), so on the OS default a `dark:`
+ * utility would fire for someone who had toggled to light on a dark-OS
+ * machine — dark-mode styles over the light palette. */
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

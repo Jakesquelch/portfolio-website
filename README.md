@@ -69,10 +69,10 @@ Persistent UI rendered from `app/layout.tsx`:
 All copy + data lives in [`lib/data.ts`](lib/data.ts):
 
 - `socials` — LinkedIn / GitHub / email, shared by Nav, Hero and Footer.
-- `about.heading` + `about.paragraphs` — bio.
+- `aboutParagraphs` — bio, rendered in order.
 - `experiences[]` — one row each; `logo` needs the image's natural
   width/height so `next/image` knows the aspect ratio.
-- `skills.groups[]` — each group renders as one labelled line.
+- `skillGroups[]` — each group renders as one labelled line.
 - `projects[]` — each renders as a horizontal card. Set `image` or `github`
   to `null` for the placeholder / "coming soon" fallbacks; `imageFit:
   "contain"` suits portrait/square screenshots.

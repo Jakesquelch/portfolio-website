@@ -14,7 +14,8 @@ Browser ── GET / ──▶ Vercel (static prerender)
    app/page.tsx    ──  <Hero /> <About /> <ExperienceSection /> <Projects />
                         ▲
                         │  typed data (no fetching — all content is local)
-   lib/data.ts     ──  socials · about · experiences · skills · projects
+   lib/data.ts     ──  socials · aboutParagraphs · experiences ·
+                       skillGroups · projects
 ```
 
 - **Framework**: Next.js 16, App Router, TypeScript, React 19.
@@ -57,17 +58,18 @@ docs/                    # this file + personal working notes
 ## Content model — `lib/data.ts`
 
 The single most important architectural decision: **components render
-data; they contain no copy.** Every string a visitor reads (except
-micro-labels like "View on GitHub") lives in `lib/data.ts` as a typed
-constant:
+data; they contain no copy.** Every string a visitor reads lives in
+`lib/data.ts` as a typed constant — the exceptions are micro-labels like
+"View on GitHub" and the section headings themselves, which name the
+layout rather than being content anyone would edit:
 
-| Export        | Type                     | Rendered by            |
-| ------------- | ------------------------ | ---------------------- |
-| `socials`     | `{ linkedin, github, email }` | Hero, Footer      |
-| `about`       | heading + paragraphs     | About                  |
-| `experiences` | `Experience[]`           | Experience (rows)      |
-| `skills`      | grouped string lists     | About (label lines)    |
-| `projects`    | `Project[]`              | Projects (cards)       |
+| Export             | Type                          | Rendered by         |
+| ------------------ | ----------------------------- | ------------------- |
+| `socials`          | `{ linkedin, github, email }` | Hero, Footer        |
+| `aboutParagraphs`  | `string[]`                    | About               |
+| `experiences`      | `Experience[]`                | Experience (rows)   |
+| `skillGroups`      | `{ label, items }[]`          | About (label lines) |
+| `projects`         | `Project[]`                   | Projects (cards)    |
 
 Adding a job or project is appending an object (plus dropping an image in
 `public/`); the components iterate arrays, so no markup changes. The

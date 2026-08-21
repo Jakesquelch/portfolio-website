@@ -2,6 +2,10 @@
  * Site content lives here as typed data so the section components don't bake
  * copy into JSX. Edit a paragraph or a project below and the layout updates
  * automatically — no need to touch the components.
+ *
+ * Section headings ("About", "Experience", "Projects") are the exception:
+ * they're literals in the components, since they name the layout rather than
+ * being content you'd ever edit.
  */
 
 // ---------- Socials -------------------------------------------------------
@@ -19,14 +23,12 @@ export const socials = {
 
 // ---------- About ---------------------------------------------------------
 
-export const about = {
-  heading: "About",
-  paragraphs: [
-    "Hello, I'm Jake! A final-year Computer Science student studying in Birmingham. I work across the stack, for now I'm doing everything from low-level backend to UI work.",
-    "I recently completed a year-long placement with IBM on the Ceph distributed-storage team, writing C++ in a genuinely large codebase and getting my changes through real-world code review. Before that I worked part-time at Civico, a Birmingham startup, building backend C++.",
-    "I'm currently looking for a graduate role and exploring which opportunities there are for me!",
-  ],
-} as const;
+/** Bio paragraphs, rendered in order as the opening block of the About section. */
+export const aboutParagraphs = [
+  "Hello, I'm Jake! A final-year Computer Science student studying in Birmingham. I work across the stack, for now I'm doing everything from low-level backend to UI work.",
+  "I recently completed a year-long placement with IBM on the Ceph distributed-storage team, writing C++ in a genuinely large codebase and getting my changes through real-world code review. Before that I worked part-time at Civico, a Birmingham startup, building backend C++.",
+  "I'm currently looking for a graduate role and exploring which opportunities there are for me!",
+] as const;
 
 // ---------- Experience ----------------------------------------------------
 
@@ -78,33 +80,30 @@ export const experiences = [
  * joined with separators on the right. Order within each group is rendered
  * as-is — list the things you most want highlighted first.
  *
- * To add a new group: append an entry to `skills.groups`. The component
- * iterates the array, so no markup change required.
+ * To add a new group: append an entry below. The component iterates the
+ * array, so no markup change required.
  */
-export const skills = {
-  heading: "Skills",
-  groups: [
-    {
-      label: "Languages",
-      items: ["Python", "Java", "C++", "JavaScript", "TypeScript", "PHP"],
-    },
-    {
-      label: "Frameworks",
-      items: [
-        "React",
-        "Angular",
-        "Node.js",
-        "FastAPI",
-        "Tailwind CSS",
-        "Bootstrap",
-      ],
-    },
-    {
-      label: "Tools",
-      items: ["Git", "Docker", "Kubernetes", "MySQL", "PyTest", "Unix"],
-    },
-  ],
-} as const;
+export const skillGroups = [
+  {
+    label: "Languages",
+    items: ["Python", "Java", "C++", "JavaScript", "TypeScript", "PHP"],
+  },
+  {
+    label: "Frameworks",
+    items: [
+      "React",
+      "Angular",
+      "Node.js",
+      "FastAPI",
+      "Tailwind CSS",
+      "Bootstrap",
+    ],
+  },
+  {
+    label: "Tools",
+    items: ["Git", "Docker", "Kubernetes", "MySQL", "PyTest", "Unix"],
+  },
+] as const;
 
 // ---------- Projects ------------------------------------------------------
 

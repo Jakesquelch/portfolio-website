@@ -14,6 +14,9 @@ Claude recommendations/idk if these have been fixed or not?:
 5. Delete the dead shadcn tokens + Geist Mono, keeping the load-bearing vars listed above.
 6. Then the polish tier: run the Lighthouse pass PLAN.md's verification list calls for, consider a CV-download link next to "Contact me" (recruiters look for it), a custom domain, and Vercel Analytics if you want to see whether anyone's visiting.
 
+**23rd August**
+Just trying to clean up some code & understand the codebase a bit better. I think there is some bloat to my code that is not necessary. For example I had some code about 'prefered-reduced-motion' that surpressed animations and stuff. I don't care about doing that, it's such a small use case and just adds unnecessary code. Those small amount of users can deal with the animations/smooth scrolling, it's not a big deal.
+
 Todo:
 - Update favicon
 - See if those claude recommendations above need doing - also search for any dead code/efficiencies that can be made

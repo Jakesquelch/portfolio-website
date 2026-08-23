@@ -92,15 +92,3 @@
     background: var(--scrollbar-thumb-hover);
   }
 }
-
-/* Respect reduced motion — disables all animations site-wide */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-}

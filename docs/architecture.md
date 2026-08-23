@@ -89,8 +89,13 @@ React Server Component rendered to static HTML at build time:
 
 There is **no animation library**. Motion is limited to ~200ms CSS
 transitions (hover states, theme cross-fade, the two fade-in buttons) and
-native smooth scrolling — all disabled by the global
-`prefers-reduced-motion` block in `globals.css`.
+smooth scrolling — no keyframes, no transforms beyond an 8px slide on the
+back-to-top button.
+
+`prefers-reduced-motion` is deliberately not handled. The motion here is
+small enough that gating it wasn't worth the code on a single-page personal
+site; visitors with the OS setting on get the same ~200ms fades as everyone
+else.
 
 ## Theming
 

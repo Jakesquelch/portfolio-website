@@ -95,7 +95,7 @@ export function Nav() {
     history.replaceState(null, "", `#${id}`);
   };
 
-  const scrollToTop = () => {
+  const handleNameClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     history.replaceState(null, "", window.location.pathname);
   };
@@ -105,7 +105,7 @@ export function Nav() {
       <nav className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4 sm:px-6 lg:max-w-4xl">
         <button
           type="button"
-          onClick={scrollToTop}
+          onClick={handleNameClick}
           aria-hidden={!showName}
           tabIndex={showName ? 0 : -1}
           className={cn(

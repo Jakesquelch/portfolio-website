@@ -127,7 +127,8 @@ public/
   hero contact button, and back-to-top.
 - Scroll listeners are `{ passive: true }`.
 - `next/image` with explicit `sizes`; `priority` on the hero photo only.
-- `prefers-reduced-motion` collapses all transitions and smooth scrolling.
+- Motion is minimal by design (~200ms colour/opacity transitions, no
+  keyframes), so `prefers-reduced-motion` isn't specially handled.
 
 ## Deploy
 

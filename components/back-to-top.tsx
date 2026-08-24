@@ -27,6 +27,10 @@ export function BackToTop() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    // Drop the section hash left behind by the last nav click — otherwise the
+    // URL still reads `#projects` while you're sitting at the top. Matches
+    // what the nav's name button does.
+    history.replaceState(null, "", window.location.pathname);
   };
 
   return (

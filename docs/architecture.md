@@ -170,6 +170,9 @@ All images go through `next/image`:
 - The nav name is hidden until the hero scrolls out of view (the hero
   already opens with the name at display size) and doubles as a
   scroll-to-top button.
+- Both routes back to the top — the nav name and the `BackToTop` button —
+  clear the section hash from the URL, so it doesn't still read
+  `#projects` once you're sitting at the top of the page.
 - `BackToTop`'s `right` offset is computed from the same `max-w-3xl` /
   `max-w-4xl` + `px-6` maths as the content column, so it aligns with the
   content edge on wide screens instead of drifting to the viewport edge.

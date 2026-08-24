@@ -1,16 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7dd3fc"/>
-      <stop offset="100%" stop-color="#a78bfa"/>
-    </linearGradient>
-  </defs>
-  <!-- Dark cosmic indigo rounded square as the chip background -->
-  <rect width="32" height="32" rx="7" fill="#0a0d1a"/>
-  <!-- 4-pointed sparkle / shine, concave-sided so it reads as a star not a +
-       The four cubic-bezier "pinch" curves give it the diamond-with-waist
-       silhouette that catches the eye even at favicon size. -->
-  <path
-    d="M16 5 C 16.5 12, 20 15.5, 27 16 C 20 16.5, 16.5 20, 16 27 C 15.5 20, 12 16.5, 5 16 C 12 15.5, 15.5 12, 16 5 Z"
-    fill="url(#g)"/>
+  <!-- Graphite tile matching the site's dark background token. -->
+  <rect width="32" height="32" rx="7" fill="#161618"/>
+  <!-- Monospace-style "J": top crossbar into a stem and hook. The crossbar is
+       what makes it read as mono rather than handwritten, a nod to Geist Mono
+       carrying every label on the site. Drawn as a stroked path rather than a
+       text element because SVG favicons can't load webfonts, so text would
+       render with whatever face each machine happens to have.
+       Note: no double hyphens in this file. XML forbids them inside comments
+       and a malformed icon fails silently as a missing favicon. -->
+  <path d="M13 8h8.5m0 0v8.5a5.25 5.25 0 0 1-10.5 0"
+        fill="none" stroke="#a78bfa" stroke-width="3.25"
+        stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

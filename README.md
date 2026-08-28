@@ -1,136 +1,162 @@
 # Portfolio Website
 
-Personal portfolio website built with Next.js 16. With the aim to give a bit more of a background and some information on myself.
+![The site in dark mode — hero and about section](docs/screenshot.png)
 
-For a full tour of how the app is put together, see
-[`docs/architecture.md`](docs/architecture.md).
+My personal portfolio site. The goal is to give a bit more background on me than
+a CV does — who I am, where I've worked, and what I've been building — in a
+format I can update in one file and push.
 
-## Stack
+It's deliberately quiet. No animation library, no hero video, no scroll-jacking.
+Neutral ground, one violet accent, and a recurring monospace-label motif. The
+content is the point; the design just gets out of its way.
 
-- **Next.js 16** (App Router) + **React 19** + **TypeScript**
-- **Tailwind CSS v4** with a small CSS-variable token set (7 tokens per theme)
-- **next-themes** (dark by default, top-right toggle to light)
-- **Geist Sans + Geist Mono** via `next/font`
-- Deployed on **Vercel**
+Live at **<https://jake-squelch.vercel.app>**.
 
-No animation library — the only motion is ~200ms CSS transitions on hovers,
-the theme cross-fade, and smooth scrolling.
+## Running it
 
-## Design — "Violet Thread"
+One script, one terminal:
 
-Quiet, data-first design: neutral ground, one violet accent, and a single
-recurring motif — monospace uppercase section labels (the `SectionLabel`
-component) with hairline rules. Dark and light palettes are mirrored
-token-for-token in `app/globals.css`:
+```bash
+./run.sh
+```
 
-- **Dark (default)**: soft graphite `#161618` (not black), lighter violet
-  `#a78bfa` accent.
-- **Light**: white ground, near-black ink, deep violet `#6d28d9`.
-- `--chip` stays light in both themes — company logos and screenshots are
-  authored against light grounds.
+Then open http://localhost:3000.
 
-Mono (Geist Mono) is used for: section labels, nav links, dates/locations,
-skill group labels, and project tag chips. Everything else is Geist Sans.
+That installs dependencies if `node_modules` is missing or `package-lock.json`
+has changed since the last install, then starts the Next dev server with hot
+reload. On a fresh clone it does the whole setup for you.
 
-## Sections
+```bash
+./run.sh prod         # production build, then serve it
+./run.sh --port 4000  # either mode, different port
+./run.sh --help
+```
 
-The page is composed in `app/page.tsx` as a single column:
+One gotcha: Next 16 only allows a single dev server per project directory. If
+one is already running, the script will start and then Next bails out with the
+port and PID of the existing one — use that server, or `taskkill /PID <pid> /F`
+(`kill <pid>` on mac/linux) and re-run.
 
-1. **Hero** (`components/sections/hero.tsx`) — name + role on the left,
-   circular profile picture on the right (stacks photo-first on mobile).
-   Social icon buttons + a Contact button that copies the email to
-   clipboard alongside the `mailto:` navigation (the site's contact
-   entry point, now that the nav has no Contact link).
-2. **About** (`components/sections/about.tsx`) — bio paragraphs and a
-   one-line-per-group skills block.
-3. **Experience** (`components/sections/experience.tsx`) — one row per
-   job: company wordmark on a light chip, role + context, period/location
-   in mono.
-4. **Projects** (`components/sections/projects.tsx`) — wide horizontal
-   cards: image left (~38%), content right, stacking on mobile.
+### Required Software
 
-Persistent UI rendered from `app/layout.tsx`:
+- **Node.js** (v18 or higher, I'm on v22.20.0)
+- **npm** (I'm on 11.6.4)
 
-- **Nav** (`components/nav.tsx`) — sticky top bar: name (left, scrolls to
-  top; fades in only after scrolling past the hero so the page doesn't
-  read "Jake Squelch" twice at once), mono section links (About /
-  Experience / Projects) + theme toggle (right). IntersectionObserver
-  drives the active-link highlight. No hamburger — the links fit on
-  mobile as-is (the name hides below `sm`).
-- **ThemeToggle** (`components/theme-toggle.tsx`) — bordered circle in the
-  nav, sun ↔ moon.
-- **BackToTop** (`components/back-to-top.tsx`) — bordered circle that fades
-  in past ~60% of the viewport height, aligned to the content column's
-  right edge rather than the viewport's.
-- **Footer** (`components/footer.tsx`) — hairline rule, socials, copyright.
+That's it — no database, no backend, nothing to configure.
 
-## Editing content
+---
 
-All copy + data lives in [`lib/data.ts`](lib/data.ts):
+## Running it manually
 
-- `socials` — LinkedIn / GitHub / email, shared by Nav, Hero and Footer.
-- `aboutParagraphs` — bio, rendered in order.
-- `experiences[]` — one row each; `logo` needs the image's natural
-  width/height so `next/image` knows the aspect ratio.
-- `skillGroups[]` — each group renders as one labelled line.
-- `projects[]` — each renders as a horizontal card. Set `image` or `github`
-  to `null` for the placeholder / "coming soon" fallbacks; set `imageBg` to
-  the screenshot's own background colour so its letterboxing blends in.
-
-Section components don't bake copy into JSX — edit `lib/data.ts` and the
-layout updates.
-
-## Local dev
+If you'd rather not use the script, or want to know what it's doing:
 
 ```bash
 npm i
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
-
 ```bash
 npm run build       # production build
+npm run start       # serve the build (needs build first)
 npm run lint        # eslint
 ```
 
-## File layout
+---
 
-```
-app/
-  layout.tsx              # fonts, ThemeProvider, Nav/Footer/BackToTop, metadata
-  page.tsx                # composes Hero / About / Projects
-  globals.css             # Tailwind v4 + the two token palettes
-  icon.svg                # favicon
-  opengraph-image.tsx     # dynamic 1200×630 OG card via next/og
-components/
-  sections/               # Hero / About / Experience / Projects
-  nav.tsx                 # sticky top nav + active-section highlight
-  section-label.tsx       # the mono section-heading motif
-  theme-toggle.tsx        # sun/moon toggle (lives in the nav)
-  back-to-top.tsx         # fixed scroll-to-top button
-  footer.tsx              # rule + socials + copyright
-  icons.tsx               # inline GitHub + LinkedIn SVGs (simple-icons paths)
-lib/
-  data.ts                 # all site copy as typed data
-  utils.ts                # cn() helper
-public/
-  profile-pic.webp        # hero photo
-  ibm.png, civico.png     # experience wordmarks
-  *-project.*             # project screenshots
-```
+## Editing the content
 
-## Performance notes
+All the copy and data lives in one file: [`lib/data.ts`](lib/data.ts). Section
+headings are hardcoded in the JSX — everything that actually changes lives in
+the data file.
 
-- About, Projects and Footer are **server components** — zero JS shipped.
-- Client JS is limited to the nav (observer + smooth scroll), theme toggle,
-  hero contact button, and back-to-top.
-- Scroll listeners are `{ passive: true }`.
-- `next/image` with explicit `sizes`; `priority` on the hero photo only.
-- Motion is minimal by design (~200ms colour/opacity transitions, no
-  keyframes), so `prefers-reduced-motion` isn't specially handled.
+- `socials` — LinkedIn / GitHub / email, shared by the nav, hero and footer
+- `aboutParagraphs` — the bio, rendered in order
+- `experiences[]` — one row per job. `logo` needs the image's natural
+  width/height so `next/image` knows the aspect ratio
+- `skillGroups[]` — each group renders as one labelled line
+- `projects[]` — each renders as a horizontal card. Set `image` or `github` to
+  `null` for the placeholder / "coming soon" fallbacks; set `imageBg` to the
+  screenshot's own background colour so its letterboxing blends in
 
-## Deploy
+---
 
-`git push` to a branch tracked by Vercel; the site builds and deploys on push.
-Domain: <https://jake-squelch.vercel.app>.
+## The design — "Violet Thread"
+
+Two palettes, mirrored token-for-token in `app/globals.css` (7 CSS variables
+each), switched by `next-themes`:
+
+- **Dark** (the default): soft graphite `#161618` — not black — with a lighter
+  violet `#a78bfa` accent
+- **Light**: white ground, near-black ink, deep violet `#6d28d9`
+- `--chip` stays light in both themes, because the company logos and project
+  screenshots are all authored against light backgrounds
+
+Geist Mono carries the motif: section labels, nav links, dates and locations,
+skill group labels, project tag chips. Everything else is Geist Sans. The only
+motion anywhere is ~200ms colour and opacity transitions on hover, the theme
+cross-fade, and smooth scrolling.
+
+### What's on the page
+
+`app/page.tsx` composes a single column:
+
+1. **Hero** — name and role on the left, circular photo on the right (stacks
+   photo-first on mobile). Social buttons plus a Contact button that copies the
+   email to the clipboard as well as firing the `mailto:`
+2. **About** — bio paragraphs and a one-line-per-group skills block
+3. **Experience** — one row per job: wordmark on a light chip, role and context,
+   period and location in mono
+4. **Projects** — wide horizontal cards, image left (~38%), content right,
+   stacking on mobile
+
+And from `app/layout.tsx`, on every screen:
+
+- **Nav** — sticky bar. The name on the left only fades in once you've scrolled
+  past the hero, so the page never reads "Jake Squelch" twice at once. An
+  IntersectionObserver drives the active-link highlight. No hamburger — the
+  three links fit on mobile once the name hides below `sm`
+- **ThemeToggle** — bordered circle in the nav, sun ↔ moon
+- **BackToTop** — fades in past ~60% of the viewport height, aligned to the
+  content column's right edge rather than the viewport's
+- **Footer** — hairline rule, socials, copyright
+
+---
+
+## Performance
+
+The site should be close to free to load, and mostly is:
+
+- About, Experience, Projects and Footer are **server components** — they ship
+  no JavaScript at all
+- Client JS is limited to four things: the nav (observer + smooth scroll), the
+  theme toggle, the hero contact button, and back-to-top
+- Scroll listeners are all `{ passive: true }`
+- `next/image` everywhere with explicit `sizes`; `priority` on the hero photo
+  only
+- Motion is minimal by design (~200ms colour/opacity transitions, no keyframes),
+  so `prefers-reduced-motion` isn't specially handled
+
+---
+
+## Technology Stack
+
+- **OS:** Windows
+- **Framework:** Next.js 16 (App Router) + React 19
+- **Language:** TypeScript 5
+- **Styling:** Tailwind CSS v4 with a CSS-variable token set (7 per theme)
+- **Theming:** next-themes, dark by default
+- **Fonts:** Geist Sans + Geist Mono via `next/font`
+- **Hosting:** Vercel
+- **AI Model:** Claude Code Pro
+
+## Deploying
+
+`git push` to a branch Vercel tracks and it builds and deploys on push. Nothing
+else to do — no env vars, no build config.
+
+## Docs
+
+- [`docs/architecture.md`](docs/architecture.md) — how it's built and why
+- [`docs/PLAN.md`](docs/PLAN.md) — the original build plan
+- [`docs/tracker.md`](docs/tracker.md) — running log of sessions and decisions
+- [`docs/next-steps.md`](docs/next-steps.md) — what's next

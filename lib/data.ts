@@ -124,6 +124,10 @@ export const skillGroups = [
  * letterboxing — match it to the screenshot's own background and the
  * padding blends in. It defaults to the light `--chip` colour, which suits
  * light-background screenshots.
+ *
+ * Descriptions are backtick strings so they can be wrapped across lines for
+ * easy editing — line breaks and indentation collapse to single spaces when
+ * rendered, so wrap them however you like.
  */
 export type Project = {
   title: string;
@@ -136,9 +140,28 @@ export type Project = {
 
 export const projects: readonly Project[] = [
   {
+    title: "Stack",
+    description: `
+      A mobile app built so my friends and I can run our home poker
+      games. All my friends have the app and we track buy-ins and rebuys
+      during the night, then at the end it works out the bank
+      transfers needed to settle up. Every game is saved to a history with an
+      all-time leaderboard of player stats. React and TypeScript frontend on a
+      Supabase Postgres backend.
+    `,
+    image: "/stack-leaderboard.png",
+    imageBg: "#020617",
+    github: "https://github.com/Jakesquelch/Stack",
+    tags: ["React", "TypeScript", "Supabase", "PostgreSQL", "Tailwind CSS"],
+  },
+  {
     title: "Pulse",
-    description:
-      "An all-in-one productivity web app built to organise my own day. Includes a to-do list with priorities and grouping, a journal, and a habit tracker, all in one place. Angular 21 frontend, FastAPI backend, and the services are covered by Vitest specs.",
+    description: `
+      An all-in-one productivity web app built to organise my own day.
+      Includes a to-do list with priorities and grouping, a journal, and a
+      habit tracker, all in one place. Angular 21 frontend, FastAPI backend,
+      and the services are covered by Vitest specs.
+    `,
     image: "/pulse-app.png",
     imageBg: "#2a2218",
     github: "https://github.com/Jakesquelch/Pulse",
@@ -146,8 +169,12 @@ export const projects: readonly Project[] = [
   },
   {
     title: "This Website",
-    description:
-      "The site you're on right now! Built from scratch with Next.js 16 and designed to easily update: every section renders from typed data, most of the page ships zero JavaScript as server components, includes dark and light theme.",
+    description: `
+      The site you're on right now! Built from scratch with Next.js 16 and
+      designed to easily update: every section renders from typed data, most
+      of the page ships zero JavaScript as server components, includes dark
+      and light theme.
+    `,
     image: "/portfolio-project.png",
     imageBg: "#161618",
     github: "https://github.com/Jakesquelch/portfolio-website",
@@ -155,8 +182,13 @@ export const projects: readonly Project[] = [
   },
   {
     title: "Weather App",
-    description:
-      "Java desktop app that pulls real-time weather data from the Open-Meteo API and surfaces it through a Swing GUI. Temperature, wind, and condition icons refreshing every ~2s. Custom HTTP layer (HttpURLConnection) with retry-on-failure to keep flaky network calls from breaking the UI; JSON Simple for parsing the API responses.",
+    description: `
+      Java desktop app that pulls real-time weather data from the Open-Meteo
+      API and surfaces it through a Swing GUI. Temperature, wind, and
+      condition icons refreshing every ~2s. Custom HTTP layer
+      (HttpURLConnection) with retry-on-failure to keep flaky network calls
+      from breaking the UI; JSON Simple for parsing the API responses.
+    `,
     image: "/weather-project.png",
     github: "https://github.com/Jakesquelch/WeatherApp",
     tags: ["Java", "Swing", "REST API", "JSON"],
